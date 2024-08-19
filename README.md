@@ -11,5 +11,5 @@ Adolescents' Game Addiction
 |--------------------------|------------------------------|
 | Chia-Wen, Kao (Wen)      | Master of Interaction Design |
 | Dai-Yun, Yiu (Zoe)       | Master of Interaction Design |
-| Ying Tung Chou (Elta)    | Master of Interaction Design |
+| Ying-Tung Chou (Elta)    | Master of Interaction Design |
 | Kevin Christian Hadinata | Master of Interaction Design |
