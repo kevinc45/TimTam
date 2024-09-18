@@ -10,6 +10,8 @@ public class Main : MonoBehaviour
     public Sprite chickenSprite;
     public Sprite cheeseSprite;
     public Sprite capsicumSprite;
+    public Sprite beerSprite;
+
 
     public float totalTime = 30;
     public Text timerText;
@@ -27,11 +29,11 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Define positions for both players
         player1RecipePosition[0] = new Vector3(-0.95f, 1.26999996f, -1f);
-        player1RecipePosition[1] = new Vector3(1.03f, 1.23f, -1f);
-        player2RecipePosition[0] = new Vector3(-0.9f, -0.99f, -1f);
+        player1RecipePosition[1] = new Vector3(-0.9f, -0.99f, -1f);
+        player2RecipePosition[0] = new Vector3(1.03f, 1.23f, -1f);
         player2RecipePosition[1] = new Vector3(1.2200001f, -0.98f, -1f);
+
 
         // Time limitation for each round
         CountdownTime();
@@ -50,13 +52,13 @@ public class Main : MonoBehaviour
     // Generate random recipe tasks
     public string[] RecipeGenerator()
     {
-        string[] ingredients = new string[] { "capsicum", "bananas", "cheese", "chicken" };
+        string[] ingredients = new string[] { "capsicum", "bananas", "cheese", "chicken", "beer" };
         int[] recipeNo = new int[2];
         string[] recipeTask = new string[2];
 
         for (int i = 0; i < 2; i++)
         {
-            recipeNo[i] = UnityEngine.Random.Range(0, 4); // Randomly select 2 ingredients
+            recipeNo[i] = UnityEngine.Random.Range(0, 5); // Randomly select 2 ingredients
         }
 
         for (int i = 0; i < recipeNo.Length; i++)
@@ -85,6 +87,9 @@ public class Main : MonoBehaviour
                 break;
             case "capsicum":
                 spriteRenderer.sprite = capsicumSprite;
+                break;
+            case "beer":
+                spriteRenderer.sprite = beerSprite;
                 break;
         }
     }
@@ -129,7 +134,7 @@ public class Main : MonoBehaviour
         {
             GameObject player1Ingredient = new GameObject();
             player1Ingredient.name = player1Task[i];
-            player1Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(-10f, 10f), UnityEngine.Random.Range(0f, -10f), -1);
+            player1Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
             player1Ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             SpriteRenderer(player1Ingredient);
         }
@@ -138,7 +143,7 @@ public class Main : MonoBehaviour
         {
             GameObject player2Ingredient = new GameObject();
             player2Ingredient.name = player2Task[i];
-            player2Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(-10f, 10f), UnityEngine.Random.Range(0f, 10f), -1);
+            player2Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(-2.5f, -4f), UnityEngine.Random.Range(-4f, 4f), -1);
             player2Ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             SpriteRenderer(player2Ingredient);
         }
