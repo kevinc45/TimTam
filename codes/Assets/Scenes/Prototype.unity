@@ -122,6 +122,40 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &432159678
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 432159679}
+  m_Layer: 0
+  m_Name: Background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &432159679
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432159678}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.2275003, y: -1.5407484, z: 0.017370863}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1017697195}
+  - {fileID: 1384275004}
+  - {fileID: 1885475396}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &481269562
 GameObject:
   m_ObjectHideFlags: 0
@@ -2367,7 +2401,7 @@ GameObject:
   - component: {fileID: 1017697195}
   - component: {fileID: 1017697194}
   m_Layer: 0
-  m_Name: Grid
+  m_Name: Floor (Grid)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2393,13 +2427,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1017697193}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.2275003, y: 1.5407484, z: -0.017370863}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 481269563}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 432159679}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1212124899
 GameObject:
@@ -2580,7 +2614,7 @@ GameObject:
   - component: {fileID: 1384275004}
   - component: {fileID: 1384275003}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Line (Square)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2646,12 +2680,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1384275002}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.2275003, y: 1.5407484, z: -0.017370863}
   m_LocalScale: {x: 24.379892, y: 0.10128125, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 432159679}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1453256260
 GameObject:
@@ -2937,6 +2971,11 @@ MonoBehaviour:
   chickenSprite: {fileID: 21300000, guid: f1f0e8b7899c34dd8831e13f66ca6023, type: 3}
   cheeseSprite: {fileID: 21300000, guid: 1462e6fc36a6f43f191b5e355473ff49, type: 3}
   capsicumSprite: {fileID: 21300000, guid: f090d269c849948a3a564e952aa5502e, type: 3}
+  totalTime: 30
+  timerText: {fileID: 0}
+  floatSpeed: 1
+  floatRangeX: 10
+  floatRangeY: -10
 --- !u!1 &1885475394
 GameObject:
   m_ObjectHideFlags: 0
@@ -2948,7 +2987,7 @@ GameObject:
   - component: {fileID: 1885475396}
   - component: {fileID: 1885475395}
   m_Layer: 0
-  m_Name: Circle
+  m_Name: Recipe (Circle)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3014,12 +3053,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1885475394}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.2275003, y: 1.5407484, z: -0.017370863}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 432159679}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1988856245
 GameObject:
@@ -3194,9 +3233,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 697903570}
-  - {fileID: 1017697195}
-  - {fileID: 1384275004}
   - {fileID: 1824988773}
   - {fileID: 1212124901}
   - {fileID: 1475118366}
-  - {fileID: 1885475396}
+  - {fileID: 432159679}
