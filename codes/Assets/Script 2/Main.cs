@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,6 +28,11 @@ public class Main : MonoBehaviour
     public float floatRangeX = 10.0f; // Horizontal range of floating movement
     public float floatRangeY = -10.0f; // Vertical range of floating movement
 
+
+    private GameObject Player1Assigned;
+    // private GameObject Player2Assigned;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +53,15 @@ public class Main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // if (Input.GetKeyDown(KeyCode.W))
+        // {
+        //     P1KickIngredient();
+        // }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            P2KickIngredient();
+        }
+
 
     }
 
@@ -71,7 +87,8 @@ public class Main : MonoBehaviour
     }
 
     // Render the sprite for the ingredient
-    public void SpriteRenderer(GameObject ingredient)
+    // 19/20/2024: Changed return type to GameObject (public void to private GameObject)
+    private GameObject SpriteRenderer(GameObject ingredient)
     {
         SpriteRenderer spriteRenderer = ingredient.AddComponent<SpriteRenderer>();
         switch (ingredient.name)
@@ -92,6 +109,7 @@ public class Main : MonoBehaviour
                 spriteRenderer.sprite = beerSprite;
                 break;
         }
+        return ingredient;
     }
 
     // Assign tasks and positions for both players
@@ -136,7 +154,7 @@ public class Main : MonoBehaviour
             player1Ingredient.name = player1Task[i];
             player1Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
             player1Ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            SpriteRenderer(player1Ingredient);
+            Player1Assigned = SpriteRenderer(player1Ingredient); // Added on 19/09/2024
         }
 
         for (int i = 0; i < player2Task.Length; i++)
@@ -146,6 +164,8 @@ public class Main : MonoBehaviour
             player2Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(-2.5f, -4f), UnityEngine.Random.Range(-4f, 4f), -1);
             player2Ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             SpriteRenderer(player2Ingredient);
+            // Player2Assigned = SpriteRenderer(player2Ingredient); // Added on 19/09/2024
+
         }
     }
 
@@ -162,4 +182,50 @@ public class Main : MonoBehaviour
             totalTime = 0;
         }
     }
+
+    // I don't know why P1KickIngredient() won't work
+    // TO DO: P1KickIngredient still need to debug
+
+    // public void P1KickIngredient()
+    // {
+    //     for (int i = 0; i < player1Task.Length; i++)
+    //     {
+    //         GameObject player1Kicakble = GameObject.Find(player2Task[i]);
+    //         GameObject player2Kickable = Player2Assigned;
+
+    //         if (player1Kicakble.name != player1Task[i])
+    //         {
+    //             Vector3 newPosition = new Vector3(
+    //                 UnityEngine.Random.Range(2.5f, 4f),
+    //                 UnityEngine.Random.Range(-4f, 4f),
+    //                 -1
+    //             );
+    //             player2Kickable.transform.position = newPosition;
+    //             break;
+    //         }
+    //     }
+    // }
+
+    // P2KickIngredeint will only work on 1 kickable ingredient for player 2 so far
+    // TO DO: P2KickIngredient need to debug for multiple kickable ingredients
+    public void P2KickIngredient()
+    {
+        for (int i = 0; i < player2Task.Length; i++)
+        {
+            GameObject player2Kicakble = GameObject.Find(player1Task[i]);
+            GameObject player1Kickable = Player1Assigned;
+
+            if (player2Kicakble.name != player2Task[i])
+            {
+                Vector3 newPosition = new Vector3(
+                    UnityEngine.Random.Range(-2.5f, -4f),
+                    UnityEngine.Random.Range(-4f, 4f),
+                    -1
+                );
+                player1Kickable.transform.position = newPosition;
+                break;
+            }
+        }
+    }
+
 }
