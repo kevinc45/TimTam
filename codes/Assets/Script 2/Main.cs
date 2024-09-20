@@ -30,7 +30,7 @@ public class Main : MonoBehaviour
 
 
     private GameObject Player1Assigned;
-    // private GameObject Player2Assigned;
+    private GameObject Player2Assigned;
 
 
     // Start is called before the first frame update
@@ -53,10 +53,10 @@ public class Main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // if (Input.GetKeyDown(KeyCode.W))
-        // {
-        //     P1KickIngredient();
-        // }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            P1KickIngredient();
+        }
         if (Input.GetKeyDown(KeyCode.I))
         {
             P2KickIngredient();
@@ -163,8 +163,7 @@ public class Main : MonoBehaviour
             player2Ingredient.name = player2Task[i];
             player2Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(-2.5f, -4f), UnityEngine.Random.Range(-4f, 4f), -1);
             player2Ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            SpriteRenderer(player2Ingredient);
-            // Player2Assigned = SpriteRenderer(player2Ingredient); // Added on 19/09/2024
+            Player2Assigned = SpriteRenderer(player2Ingredient); // Added on 19/09/2024
 
         }
     }
@@ -186,25 +185,25 @@ public class Main : MonoBehaviour
     // I don't know why P1KickIngredient() won't work
     // TO DO: P1KickIngredient still need to debug
 
-    // public void P1KickIngredient()
-    // {
-    //     for (int i = 0; i < player1Task.Length; i++)
-    //     {
-    //         GameObject player1Kicakble = GameObject.Find(player2Task[i]);
-    //         GameObject player2Kickable = Player2Assigned;
+    public void P1KickIngredient()
+    {
+        for (int i = 0; i < player1Task.Length; i++)
+        {
+            GameObject player1Kicakble = GameObject.Find(player2Task[i]);
+            GameObject player2Kickable = Player2Assigned;
 
-    //         if (player1Kicakble.name != player1Task[i])
-    //         {
-    //             Vector3 newPosition = new Vector3(
-    //                 UnityEngine.Random.Range(2.5f, 4f),
-    //                 UnityEngine.Random.Range(-4f, 4f),
-    //                 -1
-    //             );
-    //             player2Kickable.transform.position = newPosition;
-    //             break;
-    //         }
-    //     }
-    // }
+            if (player1Kicakble.name != player1Task[i])
+            {
+                Vector3 newPosition = new Vector3(
+                    UnityEngine.Random.Range(2.5f, 4f),
+                    UnityEngine.Random.Range(-4f, 4f),
+                    -1
+                );
+                player2Kickable.transform.position = newPosition;
+                break;
+            }
+        }
+    }
 
     // P2KickIngredeint will only work on 1 kickable ingredient for player 2 so far
     // TO DO: P2KickIngredient need to debug for multiple kickable ingredients
