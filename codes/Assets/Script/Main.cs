@@ -15,6 +15,7 @@ public class Main : MonoBehaviour
     public Sprite beerSprite;
     public Sprite yummySprite;
 
+    private bool isPaused = false;
     public float totalTime = 10;
 
     private string[] player1Task;
@@ -27,6 +28,8 @@ public class Main : MonoBehaviour
     private List<GameObject> player2Assigned = new List<GameObject>();
     
     private bool complete = false;
+    public GameObject player1Yummy;
+    public GameObject player2Yummy;
 
     // Start is called before the first frame update
     void Start()
@@ -47,6 +50,8 @@ public class Main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isPaused) return;
+        
         if (Input.GetKeyDown(KeyCode.Q))
         {
             P1KickIngredient(0);
@@ -72,27 +77,21 @@ public class Main : MonoBehaviour
         {
             P2KickIngredient(3);
         }
-        
-        if (CheckComplete())
+
+        if (totalTime > 0)
         {
-            GameObject player1Yummy = new GameObject();
-            player1Yummy.name = "yummy";
-            SpriteRenderer(player1Yummy);
-            player1Yummy.transform.position = new Vector3(-2.7f, -0.51f, -2.7f);
-            player1Yummy.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
-            player1Yummy.transform.localScale = new Vector3(3f, 3f, 3f);
-            
-            GameObject player2Yummy = new GameObject();
-            player2Yummy.name = "yummy";
-            SpriteRenderer(player2Yummy);
-            player2Yummy.transform.position = new Vector3(2.7f, 0.51f, -2.7f);
-            player2Yummy.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
-            player2Yummy.transform.localScale = new Vector3(3f, 3f, 3f);
-            
+            CountdownTime();
+            if (CheckComplete())
+            {
+                player1Yummy.SetActive(true);
+                player2Yummy.SetActive(true);
+                PauseForTwoSeconds();
+            }
+        }
+        else
+        {
             Debug.Break();
         }
-
-        
     }
 
     // Generate random recipe tasks
@@ -110,7 +109,6 @@ public class Main : MonoBehaviour
         for (int i = 0; i < recipeNo.Length; i++)
         {
             recipeTask[i] = ingredients[recipeNo[i]];
-            Debug.Log(ingredients[recipeNo[i]]);
         }
 
         return recipeTask;
@@ -151,12 +149,15 @@ public class Main : MonoBehaviour
         player1Task = RecipeGenerator();
         player2Task = RecipeGenerator();
 
+        GameObject player1Parent = GameObject.Find("Player1Recipe");
+        GameObject player2Parent = GameObject.Find("Player2Recipe");
         // Create and place objects for player 1's tasks
         for (int i = 0; i < player1Task.Length; i++)
         {
             GameObject ingredient = new GameObject(player1Task[i]);
             SpriteRenderer(ingredient);
             SetPosition(ingredient, player1RecipePosition[i]); // Assign specific position
+            ingredient.transform.SetParent(player1Parent.transform);
         }
 
         // Create and place objects for player 2's tasks
@@ -165,6 +166,7 @@ public class Main : MonoBehaviour
             GameObject ingredient = new GameObject(player2Task[i]);
             SpriteRenderer(ingredient);
             SetPosition(ingredient, player2RecipePosition[i]); // Assign specific position
+            ingredient.transform.SetParent(player2Parent.transform);
         }
 
         Debug.Log("Player 1 Tasks: " + string.Join(", ", player1Task));
@@ -181,14 +183,17 @@ public class Main : MonoBehaviour
     // Ingredients assign
     public void IngredientAssign()
     {
+        GameObject player1Parent = GameObject.Find("Player1Ingredients");
+        GameObject player2Parent = GameObject.Find("Player2Ingredients");
+        
         for (int i = 0; i < player1Task.Length; i++)
         {
             GameObject player1Ingredient = new GameObject();
             player1Ingredient.name = player1Task[i];
             player1Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
             player1Ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            // player1Assigned[i] = SpriteRenderer(player1Ingredient); // Added on 19/09/2024
             player2Assigned.Add(SpriteRenderer(player1Ingredient));  // change the player1Assigned to list
+            player1Ingredient.transform.SetParent(player1Parent.transform);
         }
         SortByYAxis(player2Assigned);
 
@@ -198,8 +203,8 @@ public class Main : MonoBehaviour
             player2Ingredient.name = player2Task[i];
             player2Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(-2.5f, -4f), UnityEngine.Random.Range(-4f, 4f), -1);
             player2Ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            // player2Assigned[i] = SpriteRenderer(player2Ingredient); // Added on 19/09/2024
             player1Assigned.Add(SpriteRenderer(player2Ingredient));  // change the player2Assigned to list
+            player2Ingredient.transform.SetParent(player2Parent.transform);
         }
         SortByYAxis(player2Assigned);
     }
@@ -223,16 +228,15 @@ public class Main : MonoBehaviour
         {
             player2Assigned.Add(player1Assigned[index]);
             player1Assigned.RemoveAt(index);
-            for (int i = 0; i < player1Assigned.Count; i++)
-            {
-                Debug.Log("Player 1 Assigned: " + player1Assigned[i]);
-            }
-            for (int i = 0; i < player2Assigned.Count; i++)
-            {
-                Debug.Log("Player 2 Assigned: " + player2Assigned[i]);
-            }
             Vector3 newPosition = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
-            player2Assigned[player2Assigned.Count() - 1].transform.position = newPosition;
+            if (player2Assigned.Count == 0)
+            {
+                player2Assigned[0].transform.position = newPosition;
+            }
+            else
+            {
+                player2Assigned[player2Assigned.Count() - 1].transform.position = newPosition;
+            }
             
             SortByYAxis(player1Assigned);
             SortByYAxis(player2Assigned);
@@ -258,16 +262,15 @@ public class Main : MonoBehaviour
         {
             player1Assigned.Add(player2Assigned[index]);
             player2Assigned.RemoveAt(index);
-            for (int i = 0; i < player2Assigned.Count; i++)
-            {
-                Debug.Log("Player 1 Assigned: " + player1Assigned[i]);
-            }
-            for (int i = 0; i < player2Assigned.Count; i++)
-            {
-                Debug.Log("Player 2 Assigned: " + player2Assigned[i]);
-            }
             Vector3 newPosition = new Vector3(UnityEngine.Random.Range(-2.5f, -4f), UnityEngine.Random.Range(-4f, 4f), -1);
-            player1Assigned[player1Assigned.Count() - 1].transform.position = newPosition;
+            if (player1Assigned.Count == 0)
+            {
+                player1Assigned[0].transform.position = newPosition;
+            }
+            else
+            {
+                player1Assigned[player1Assigned.Count() - 1].transform.position = newPosition;
+            }
             
             SortByYAxis(player1Assigned);
             SortByYAxis(player2Assigned);
@@ -286,7 +289,15 @@ public class Main : MonoBehaviour
             }
         }
     }
-    
+
+    public void InitialRound()
+    {
+        player1Assigned.Clear();
+        player2Assigned.Clear();
+        Array.Clear(player1Task, 0, player1Task.Length);
+        Array.Clear(player2Task, 0, player1Task.Length);
+    }
+
     private void SortByYAxis(List<GameObject> assignedList)
     {
         assignedList.Sort((a, b) => b.transform.position.y.CompareTo(a.transform.position.y));  // change the order of the ingredients based on position
@@ -321,5 +332,52 @@ public class Main : MonoBehaviour
         }
 
         return true; // All tasks matched
+    }
+
+    public void DestoryGameObject()
+    {
+        foreach (Transform child in GameObject.Find("Player1Recipe").transform)
+        {
+            Destroy(child.gameObject);
+        }
+        
+        foreach (Transform child in GameObject.Find("Player2Recipe").transform)
+        {
+            Destroy(child.gameObject);
+        }
+        
+        foreach (Transform child in GameObject.Find("Player1Ingredients").transform)
+        {
+            Destroy(child.gameObject);
+        }
+        
+        foreach (Transform child in GameObject.Find("Player2Ingredients").transform)
+        {
+            Destroy(child.gameObject);
+        }
+        
+        player1Yummy.SetActive(false);
+        player2Yummy.SetActive(false);
+    }
+
+    public void PauseForTwoSeconds()
+    {
+        isPaused = true; // Set the pause flag
+        StartCoroutine(PauseCoroutine());
+    }
+    
+    private IEnumerator PauseCoroutine()
+    {
+        Debug.Log("Pausing game...");
+        Time.timeScale = 0; // Pause the game
+        yield return new WaitForSecondsRealtime(2); // Wait for 1 real seconds
+        Time.timeScale = 1; // Resume the game
+        Debug.Log("Resuming game...");
+        DestoryGameObject();
+        InitialRound();
+        TaskAssign();
+        IngredientAssign();
+        
+        isPaused = false; // Reset the pause flag
     }
 }
