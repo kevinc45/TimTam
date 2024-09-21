@@ -13,10 +13,9 @@ public class Main : MonoBehaviour
     public Sprite cheeseSprite;
     public Sprite capsicumSprite;
     public Sprite beerSprite;
+    public Sprite yummySprite;
 
-
-    public float totalTime = 30;
-    public Text timerText;
+    public float totalTime = 10;
 
     private string[] player1Task;
     private string[] player2Task;
@@ -24,14 +23,10 @@ public class Main : MonoBehaviour
     private Vector3[] player1RecipePosition = new Vector3[2];
     private Vector3[] player2RecipePosition = new Vector3[2];
 
-    public float floatSpeed = 1.0f; // Speed of floating movement
-    public float floatRangeX = 10.0f; // Horizontal range of floating movement
-    public float floatRangeY = -10.0f; // Vertical range of floating movement
-
-
-    private GameObject[] player1Assigned;
-    private GameObject[] player2Assigned;
-
+    private List<GameObject> player1Assigned = new List<GameObject>();
+    private List<GameObject> player2Assigned = new List<GameObject>();
+    
+    private bool complete = false;
 
     // Start is called before the first frame update
     void Start()
@@ -40,9 +35,7 @@ public class Main : MonoBehaviour
         player1RecipePosition[1] = new Vector3(-0.9f, -0.99f, -1f);
         player2RecipePosition[0] = new Vector3(1.03f, 1.23f, -1f);
         player2RecipePosition[1] = new Vector3(1.2200001f, -0.98f, -1f);
-
-        player1Assigned = new GameObject[4];
-        player2Assigned = new GameObject[4];
+        
         // Time limitation for each round
         CountdownTime();
 
@@ -54,16 +47,52 @@ public class Main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            P1KickIngredient();
+            P1KickIngredient(0);
+        } else if (Input.GetKeyDown(KeyCode.W))
+        {
+            P1KickIngredient(1);
+        } else if (Input.GetKeyDown(KeyCode.E))
+        {
+            P1KickIngredient(2);
+        } else if (Input.GetKeyDown(KeyCode.R))
+        {
+            P1KickIngredient(3);
+        } else if (Input.GetKeyDown(KeyCode.U))
+        {
+            P2KickIngredient(0);
+        } else if (Input.GetKeyDown(KeyCode.I))
+        {
+            P2KickIngredient(1);
+        } else if (Input.GetKeyDown(KeyCode.O))
+        {
+            P2KickIngredient(2);
+        } else if (Input.GetKeyDown(KeyCode.P))
+        {
+            P2KickIngredient(3);
         }
-        // if (Input.GetKeyDown(KeyCode.I))
-        // {
-        //     P2KickIngredient();
-        // }
+        
+        if (CheckComplete())
+        {
+            GameObject player1Yummy = new GameObject();
+            player1Yummy.name = "yummy";
+            SpriteRenderer(player1Yummy);
+            player1Yummy.transform.position = new Vector3(-2.7f, -0.51f, -2.7f);
+            player1Yummy.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+            player1Yummy.transform.localScale = new Vector3(3f, 3f, 3f);
+            
+            GameObject player2Yummy = new GameObject();
+            player2Yummy.name = "yummy";
+            SpriteRenderer(player2Yummy);
+            player2Yummy.transform.position = new Vector3(2.7f, 0.51f, -2.7f);
+            player2Yummy.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+            player2Yummy.transform.localScale = new Vector3(3f, 3f, 3f);
+            
+            Debug.Break();
+        }
 
-
+        
     }
 
     // Generate random recipe tasks
@@ -108,6 +137,9 @@ public class Main : MonoBehaviour
                 break;
             case "beer":
                 spriteRenderer.sprite = beerSprite;
+                break;
+            case "yummy":
+                spriteRenderer.sprite = yummySprite;
                 break;
         }
         return ingredient;
@@ -155,8 +187,10 @@ public class Main : MonoBehaviour
             player1Ingredient.name = player1Task[i];
             player1Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
             player1Ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            player1Assigned[i] = SpriteRenderer(player1Ingredient); // Added on 19/09/2024
+            // player1Assigned[i] = SpriteRenderer(player1Ingredient); // Added on 19/09/2024
+            player2Assigned.Add(SpriteRenderer(player1Ingredient));  // change the player1Assigned to list
         }
+        SortByYAxis(player2Assigned);
 
         for (int i = 0; i < player2Task.Length; i++)
         {
@@ -164,8 +198,10 @@ public class Main : MonoBehaviour
             player2Ingredient.name = player2Task[i];
             player2Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(-2.5f, -4f), UnityEngine.Random.Range(-4f, 4f), -1);
             player2Ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            player2Assigned[i] = SpriteRenderer(player2Ingredient); // Added on 19/09/2024
+            // player2Assigned[i] = SpriteRenderer(player2Ingredient); // Added on 19/09/2024
+            player1Assigned.Add(SpriteRenderer(player2Ingredient));  // change the player2Assigned to list
         }
+        SortByYAxis(player2Assigned);
     }
 
     // Set countdown time
@@ -177,46 +213,113 @@ public class Main : MonoBehaviour
         }
         else
         {
-            timerText.text = "Time's up";
             totalTime = 0;
         }
     }
 
-    public void P1KickIngredient()
+    public void P1KickIngredient(int index)
     {
-        for (int i = 0; i < player1Task.Length; i++)
+        if (index >= 0 && index < player1Assigned.Count)
         {
-            for (int j = 0; j < player1Assigned.Length; j++)
+            player2Assigned.Add(player1Assigned[index]);
+            player1Assigned.RemoveAt(index);
+            for (int i = 0; i < player1Assigned.Count; i++)
             {
-                // if (player1Assigned[j].name != player1Task[i])
-                // {
-                    Vector3 newPosition = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
-                    player2Assigned[i].transform.position = newPosition;
-                // }
+                Debug.Log("Player 1 Assigned: " + player1Assigned[i]);
             }
+            for (int i = 0; i < player2Assigned.Count; i++)
+            {
+                Debug.Log("Player 2 Assigned: " + player2Assigned[i]);
+            }
+            Vector3 newPosition = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
+            player2Assigned[player2Assigned.Count() - 1].transform.position = newPosition;
             
+            SortByYAxis(player1Assigned);
+            SortByYAxis(player2Assigned);
+            
+            // Log the sorted lists
+            Debug.Log("Player 1 Assigned after sorting by Y-axis:");
+            for (int i = 0; i < player1Assigned.Count; i++)
+            {
+                Debug.Log("Player 1 Assigned: " + player1Assigned[i].name + " Y: " + player1Assigned[i].transform.position.y);
+            }
+
+            Debug.Log("Player 2 Assigned after sorting by Y-axis:");
+            for (int i = 0; i < player2Assigned.Count; i++)
+            {
+                Debug.Log("Player 2 Assigned: " + player2Assigned[i].name + " Y: " + player2Assigned[i].transform.position.y);
+            }
         }
     }
+    
+    public void P2KickIngredient(int index)
+    {
+        if (index >= 0 && index < player2Assigned.Count)
+        {
+            player1Assigned.Add(player2Assigned[index]);
+            player2Assigned.RemoveAt(index);
+            for (int i = 0; i < player2Assigned.Count; i++)
+            {
+                Debug.Log("Player 1 Assigned: " + player1Assigned[i]);
+            }
+            for (int i = 0; i < player2Assigned.Count; i++)
+            {
+                Debug.Log("Player 2 Assigned: " + player2Assigned[i]);
+            }
+            Vector3 newPosition = new Vector3(UnityEngine.Random.Range(-2.5f, -4f), UnityEngine.Random.Range(-4f, 4f), -1);
+            player1Assigned[player1Assigned.Count() - 1].transform.position = newPosition;
+            
+            SortByYAxis(player1Assigned);
+            SortByYAxis(player2Assigned);
+            
+            // Log the sorted lists
+            Debug.Log("Player 1 Assigned after sorting by Y-axis:");
+            for (int i = 0; i < player1Assigned.Count; i++)
+            {
+                Debug.Log("Player 1 Assigned: " + player1Assigned[i].name + " Y: " + player1Assigned[i].transform.position.y);
+            }
 
-    // P2KickIngredeint will only work on 1 kickable ingredient for player 2 so far
-    // TO DO: P2KickIngredient need to debug for multiple kickable ingredients
-    // public void P2KickIngredient()
-    // {
-    //     for (int i = 0; i < player2Task.Length; i++)
-    //     {
-    //         GameObject[] player1Kicakble = player2Assigned;
-    //         GameObject[] player2Kickable = player2Assigned;
+            Debug.Log("Player 2 Assigned after sorting by Y-axis:");
+            for (int i = 0; i < player2Assigned.Count; i++)
+            {
+                Debug.Log("Player 2 Assigned: " + player2Assigned[i].name + " Y: " + player2Assigned[i].transform.position.y);
+            }
+        }
+    }
+    
+    private void SortByYAxis(List<GameObject> assignedList)
+    {
+        assignedList.Sort((a, b) => b.transform.position.y.CompareTo(a.transform.position.y));  // change the order of the ingredients based on position
+    }
 
-    //         if (player2Kicakble.name != player2Task[i])
-    //         {
-    //             Vector3 newPosition = new Vector3(
-    //                 UnityEngine.Random.Range(-2.5f, -4f),
-    //                 UnityEngine.Random.Range(-4f, 4f),
-    //                 -1
-    //             );
-    //             player1Kickable.transform.position = newPosition;
-    //         }
-    //     }
-    // }
+    public bool CheckComplete()
+    { 
+        // Check if both players have exactly 2 assigned items
+        if (player1Assigned.Count != 2 || player2Assigned.Count != 2)
+        {
+            return false; // Not complete if either player does not have 2 items
+        }
 
+        // Check player 1's assigned items against their tasks
+        foreach (var task in player1Task)
+        {
+            // Check if the assigned items match the tasks
+            if (!player1Assigned.Any(ingredient => ingredient.name == task))
+            {
+                return false; // If any task is not matched, return false
+            }
+        }
+
+        // Check player 2's assigned items against their tasks
+        foreach (var task in player2Task)
+        {
+            // Check if the assigned items match the tasks
+            if (!player2Assigned.Any(ingredient => ingredient.name == task))
+            {
+                return false; // If any task is not matched, return false
+            }
+        }
+
+        return true; // All tasks matched
+    }
 }

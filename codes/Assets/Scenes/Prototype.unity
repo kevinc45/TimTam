@@ -122,37 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &237875771
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 237875772}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &237875772
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 237875771}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.68, y: -1.73, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &337599459
 GameObject:
   m_ObjectHideFlags: 0
@@ -3018,7 +2987,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1824988772}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 907a1f6092caf459e85da2f01bfbb8aa, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f56c148d976d426d96176a997fd0472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bananaSprite: {fileID: 21300000, guid: d532d690dfda94528a177705249cc192, type: 3}
@@ -3026,11 +2995,8 @@ MonoBehaviour:
   cheeseSprite: {fileID: 21300000, guid: 1462e6fc36a6f43f191b5e355473ff49, type: 3}
   capsicumSprite: {fileID: 21300000, guid: f090d269c849948a3a564e952aa5502e, type: 3}
   beerSprite: {fileID: 21300000, guid: c03c9ee3771e64b4c8ad748b0fa5f8d1, type: 3}
-  totalTime: 30
-  timerText: {fileID: 0}
-  floatSpeed: 1
-  floatRangeX: 10
-  floatRangeY: -10
+  yummySprite: {fileID: 0}
+  totalTime: 10
 --- !u!1 &1885475394
 GameObject:
   m_ObjectHideFlags: 0
@@ -3290,4 +3256,3 @@ SceneRoots:
   - {fileID: 697903570}
   - {fileID: 1824988773}
   - {fileID: 432159679}
-  - {fileID: 237875772}
