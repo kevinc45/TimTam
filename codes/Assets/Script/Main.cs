@@ -2,9 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
+using System.IO.Ports;
 
 public class Main : MonoBehaviour
 {
@@ -31,6 +30,11 @@ public class Main : MonoBehaviour
     public GameObject player1Yummy;
     public GameObject player2Yummy;
 
+    // Arduino connection    
+    private SerialPort serialPort;
+    public string portName = "COM16"; // Change this depend on the Arduino's port
+    public int baudRate = 9600;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -45,12 +49,61 @@ public class Main : MonoBehaviour
         // Assign recipe tasks to both players
         TaskAssign();
         IngredientAssign();
+        
+        // Initiating Arduino Connection
+        serialPort = new SerialPort(portName, baudRate);
+        if (!serialPort.IsOpen)
+        {
+            serialPort.Open();
+            serialPort.ReadTimeout = 1000;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         if (isPaused) return;
+        
+        // Checks if Arduino connection successful
+        if (serialPort != null && serialPort.IsOpen && serialPort.BytesToRead > 0)
+        {
+            
+            string data = serialPort.ReadLine();
+            string[] distances = data.Split(','); // Data sent in (x1, x2) format, stored in an array
+            
+            if (distances.Length == 2)
+            {
+                // TryParse is to convert string to float, allow comparison.
+                if (float.TryParse(distances[0], out float distance1) && float.TryParse(distances[1], out float distance2))
+                {
+                    if (distance1 < 20 && distance2 < 20)
+                    {
+                        P1KickIngredient(0);
+                        P1KickIngredient(1);
+                        P1KickIngredient(2);
+                        P1KickIngredient(3);
+                        P2KickIngredient(0);
+                        P2KickIngredient(1);
+                        P2KickIngredient(2);
+                        P2KickIngredient(3);
+                    }
+                    else if (distance1 < 20)
+                    {
+                        P1KickIngredient(0);
+                        P1KickIngredient(1);
+                        P1KickIngredient(2);
+                        P1KickIngredient(3);
+                    }
+                    else if (distance2 < 20)
+                    {
+                        P2KickIngredient(0);
+                        P2KickIngredient(1);
+                        P2KickIngredient(2);
+                        P2KickIngredient(3);
+                    }
+                }
+            }
+        }
         
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -379,5 +432,13 @@ public class Main : MonoBehaviour
         IngredientAssign();
         
         isPaused = false; // Reset the pause flag
+    }
+    
+    private void OnApplicationQuit()
+    {
+        if (serialPort != null && serialPort.IsOpen)
+        {
+            serialPort.Close();
+        }
     }
 }
