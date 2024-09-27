@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-// using System.IO.Ports;
+using System.IO.Ports;
 
 public class Main : MonoBehaviour
 {
@@ -30,10 +30,10 @@ public class Main : MonoBehaviour
     public GameObject player1Yummy;
     public GameObject player2Yummy;
 
-    // Arduino connection    
-    // private SerialPort serialPort;
-    // public string portName = "COM16"; // Change this depend on the Arduino's port
-    // public int baudRate = 9600;
+    Arduino connection    
+    private SerialPort serialPort;
+    public string portName = "COM16"; // Change this depend on the Arduino's port
+    public int baudRate = 9600;
     
     // Start is called before the first frame update
     void Start()
@@ -50,13 +50,13 @@ public class Main : MonoBehaviour
         TaskAssign();
         IngredientAssign();
         
-        // Initiating Arduino Connection
-        // serialPort = new SerialPort(portName, baudRate);
-        // if (!serialPort.IsOpen)
-        // {
-        //     serialPort.Open();
-        //     serialPort.ReadTimeout = 1000;
-        // }
+        Initiating Arduino Connection
+        serialPort = new SerialPort(portName, baudRate);
+        if (!serialPort.IsOpen)
+        {
+            serialPort.Open();
+            serialPort.ReadTimeout = 1000;
+        }
     }
 
     // Update is called once per frame
@@ -64,46 +64,46 @@ public class Main : MonoBehaviour
     {
         if (isPaused) return;
         
-        // Checks if Arduino connection successful
-        // if (serialPort != null && serialPort.IsOpen && serialPort.BytesToRead > 0)
-        // {
-        //     
-        //     string data = serialPort.ReadLine();
-        //     string[] distances = data.Split(','); // Data sent in (x1, x2) format, stored in an array
-        //     
-        //     if (distances.Length == 2)
-        //     {
-        //         // TryParse is to convert string to float, allow comparison.
-        //         if (float.TryParse(distances[0], out float distance1) && float.TryParse(distances[1], out float distance2))
-        //         {
-        //             if (distance1 < 20 && distance2 < 20)
-        //             {
-        //                 P1KickIngredient(0);
-        //                 P1KickIngredient(1);
-        //                 P1KickIngredient(2);
-        //                 P1KickIngredient(3);
-        //                 P2KickIngredient(0);
-        //                 P2KickIngredient(1);
-        //                 P2KickIngredient(2);
-        //                 P2KickIngredient(3);
-        //             }
-        //             else if (distance1 < 20)
-        //             {
-        //                 P1KickIngredient(0);
-        //                 P1KickIngredient(1);
-        //                 P1KickIngredient(2);
-        //                 P1KickIngredient(3);
-        //             }
-        //             else if (distance2 < 20)
-        //             {
-        //                 P2KickIngredient(0);
-        //                 P2KickIngredient(1);
-        //                 P2KickIngredient(2);
-        //                 P2KickIngredient(3);
-        //             }
-        //         }
-        //     }
-        // }
+        Checks if Arduino connection successful
+        if (serialPort != null && serialPort.IsOpen && serialPort.BytesToRead > 0)
+        {
+            
+            string data = serialPort.ReadLine();
+            string[] distances = data.Split(','); // Data sent in (x1, x2) format, stored in an array
+            
+            if (distances.Length == 2)
+            {
+                // TryParse is to convert string to float, allow comparison.
+                if (float.TryParse(distances[0], out float distance1) && float.TryParse(distances[1], out float distance2))
+                {
+                    if (distance1 < 20 && distance2 < 20)
+                    {
+                        P1KickIngredient(0);
+                        P1KickIngredient(1);
+                        P1KickIngredient(2);
+                        P1KickIngredient(3);
+                        P2KickIngredient(0);
+                        P2KickIngredient(1);
+                        P2KickIngredient(2);
+                        P2KickIngredient(3);
+                    }
+                    else if (distance1 < 20)
+                    {
+                        P1KickIngredient(0);
+                        P1KickIngredient(1);
+                        P1KickIngredient(2);
+                        P1KickIngredient(3);
+                    }
+                    else if (distance2 < 20)
+                    {
+                        P2KickIngredient(0);
+                        P2KickIngredient(1);
+                        P2KickIngredient(2);
+                        P2KickIngredient(3);
+                    }
+                }
+            }
+        }
         
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -243,7 +243,29 @@ public class Main : MonoBehaviour
         {
             GameObject player1Ingredient = new GameObject();
             player1Ingredient.name = player1Task[i];
-            player1Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
+            Vector3 p1Position;
+            bool positionValid;
+            
+            do
+            {
+                positionValid = true;
+                float randomX = Mathf.Round(UnityEngine.Random.Range(2.5f, 4f) * 10) / 10;
+                float randomY = Mathf.Round(UnityEngine.Random.Range(-4f, 4f) * 10) / 10;
+                p1Position = new Vector3(randomX, randomY, -1);
+
+                foreach (var ingredient in player2Assigned)
+                {
+                    Debug.Log("Distance 2: " + Vector3.Distance(p1Position, ingredient.transform.position));
+                    if (Vector3.Distance(p1Position, ingredient.transform.position) < 3.0f)
+                    {
+                        positionValid = false;
+                        break;
+                    }
+                }
+            } while (!positionValid);
+        
+            player1Ingredient.transform.position = p1Position;
+            // player1Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
             player1Ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             player2Assigned.Add(SpriteRenderer(player1Ingredient));  // change the player1Assigned to list
             player1Ingredient.transform.SetParent(player1Parent.transform);
@@ -254,12 +276,34 @@ public class Main : MonoBehaviour
         {
             GameObject player2Ingredient = new GameObject();
             player2Ingredient.name = player2Task[i];
-            player2Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(-2.5f, -4f), UnityEngine.Random.Range(-4f, 4f), -1);
+            Vector3 p2Position;
+            bool positionValid;
+            
+            do
+            {
+                positionValid = true;
+                float randomX = Mathf.Round(UnityEngine.Random.Range(-2.5f, -4f) * 10) / 10;
+                float randomY = Mathf.Round(UnityEngine.Random.Range(-4f, 4f) * 10) / 10;
+                p2Position = new Vector3(randomX, randomY, -1);
+
+                foreach (var ingredient in player1Assigned)
+                {
+                    Debug.Log("Distance 1: " + Vector3.Distance(p2Position, ingredient.transform.position));
+                    if (Vector3.Distance(p2Position, ingredient.transform.position) < 3.0f)
+                    {
+                        positionValid = false;
+                        break;
+                    }
+                }
+            } while (!positionValid);
+        
+            player2Ingredient.transform.position = p2Position;
+            // player2Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(-2.5f, -4f), UnityEngine.Random.Range(-4f, 4f), -1);
             player2Ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             player1Assigned.Add(SpriteRenderer(player2Ingredient));  // change the player2Assigned to list
             player2Ingredient.transform.SetParent(player2Parent.transform);
         }
-        SortByYAxis(player2Assigned);
+        SortByYAxis(player1Assigned);
     }
 
     // Set countdown time
@@ -443,11 +487,11 @@ public class Main : MonoBehaviour
         isPaused = false; // Reset the pause flag
     }
     
-    // private void OnApplicationQuit()
-    // {
-    //     if (serialPort != null && serialPort.IsOpen)
-    //     {
-    //         serialPort.Close();
-    //     }
-    // }
+    private void OnApplicationQuit()
+    {
+        if (serialPort != null && serialPort.IsOpen)
+        {
+            serialPort.Close();
+        }
+    }
 }
