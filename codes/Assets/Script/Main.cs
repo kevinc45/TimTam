@@ -25,7 +25,7 @@ public class Main : MonoBehaviour
 
     private List<GameObject> player1Assigned = new List<GameObject>();
     private List<GameObject> player2Assigned = new List<GameObject>();
-    
+
     private bool complete = false;
     public GameObject player1Yummy;
     public GameObject player2Yummy;
@@ -34,7 +34,7 @@ public class Main : MonoBehaviour
     private SerialPort serialPort;
     public string portName = "COM16"; // Change this depend on the Arduino's port
     public int baudRate = 9600;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,14 +42,14 @@ public class Main : MonoBehaviour
         player1RecipePosition[1] = new Vector3(-0.9f, -0.99f, -1f);
         player2RecipePosition[0] = new Vector3(1.03f, 1.23f, -1f);
         player2RecipePosition[1] = new Vector3(1.2200001f, -0.98f, -1f);
-        
+
         // Time limitation for each round
         CountdownTime();
 
         // Assign recipe tasks to both players
         TaskAssign();
         IngredientAssign();
-        
+
         // Initiating Arduino Connection
         serialPort = new SerialPort(portName, baudRate);
         if (!serialPort.IsOpen)
@@ -63,14 +63,14 @@ public class Main : MonoBehaviour
     void Update()
     {
         if (isPaused) return;
-        
+
         // Checks if Arduino connection successful
         if (serialPort != null && serialPort.IsOpen && serialPort.BytesToRead > 0)
         {
-            
+
             string data = serialPort.ReadLine();
             string[] distances = data.Split(','); // Data sent in (x1, x2) format, stored in an array
-            
+
             if (distances.Length == 2)
             {
                 // TryParse is to convert string to float, allow comparison.
@@ -104,29 +104,36 @@ public class Main : MonoBehaviour
                 }
             }
         }
-        
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
             P1KickIngredient(0);
-        } else if (Input.GetKeyDown(KeyCode.W))
+        }
+        else if (Input.GetKeyDown(KeyCode.W))
         {
             P1KickIngredient(1);
-        } else if (Input.GetKeyDown(KeyCode.E))
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
         {
             P1KickIngredient(2);
-        } else if (Input.GetKeyDown(KeyCode.R))
+        }
+        else if (Input.GetKeyDown(KeyCode.R))
         {
             P1KickIngredient(3);
-        } else if (Input.GetKeyDown(KeyCode.U))
+        }
+        else if (Input.GetKeyDown(KeyCode.U))
         {
             P2KickIngredient(0);
-        } else if (Input.GetKeyDown(KeyCode.I))
+        }
+        else if (Input.GetKeyDown(KeyCode.I))
         {
             P2KickIngredient(1);
-        } else if (Input.GetKeyDown(KeyCode.O))
+        }
+        else if (Input.GetKeyDown(KeyCode.O))
         {
             P2KickIngredient(2);
-        } else if (Input.GetKeyDown(KeyCode.P))
+        }
+        else if (Input.GetKeyDown(KeyCode.P))
         {
             P2KickIngredient(3);
         }
@@ -238,14 +245,14 @@ public class Main : MonoBehaviour
     {
         GameObject player1Parent = GameObject.Find("Player1Ingredients");
         GameObject player2Parent = GameObject.Find("Player2Ingredients");
-        
+
         for (int i = 0; i < player1Task.Length; i++)
         {
             GameObject player1Ingredient = new GameObject();
             player1Ingredient.name = player1Task[i];
             Vector3 p1Position;
             bool positionValid;
-            
+
             do
             {
                 positionValid = true;
@@ -263,7 +270,7 @@ public class Main : MonoBehaviour
                     }
                 }
             } while (!positionValid);
-        
+
             player1Ingredient.transform.position = p1Position;
             // player1Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
             player1Ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
@@ -278,7 +285,7 @@ public class Main : MonoBehaviour
             player2Ingredient.name = player2Task[i];
             Vector3 p2Position;
             bool positionValid;
-            
+
             do
             {
                 positionValid = true;
@@ -296,7 +303,7 @@ public class Main : MonoBehaviour
                     }
                 }
             } while (!positionValid);
-        
+
             player2Ingredient.transform.position = p2Position;
             // player2Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(-2.5f, -4f), UnityEngine.Random.Range(-4f, 4f), -1);
             player2Ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
@@ -327,7 +334,7 @@ public class Main : MonoBehaviour
             float originalPositionY = player1Assigned[index].transform.position.y;
             player2Assigned.Add(player1Assigned[index]);
             player1Assigned.RemoveAt(index);
-            
+
             // Vector3 newPosition = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
             if (player2Assigned.Count == 0)
             {
@@ -339,10 +346,10 @@ public class Main : MonoBehaviour
                 // player2Assigned[player2Assigned.Count() - 1].transform.position = newPosition;
                 player2Assigned[player2Assigned.Count() - 1].transform.position = new Vector3(-originalPositionX, originalPositionY, -1);
             }
-            
+
             SortByYAxis(player1Assigned);
             SortByYAxis(player2Assigned);
-            
+
             // Log the sorted lists
             Debug.Log("Player 1 Assigned after sorting by Y-axis:");
             for (int i = 0; i < player1Assigned.Count; i++)
@@ -357,7 +364,7 @@ public class Main : MonoBehaviour
             }
         }
     }
-    
+
     public void P2KickIngredient(int index)
     {
         if (index >= 0 && index < player2Assigned.Count)
@@ -377,10 +384,10 @@ public class Main : MonoBehaviour
                 // player1Assigned[player1Assigned.Count() - 1].transform.position = newPosition;
                 player1Assigned[player1Assigned.Count() - 1].transform.position = new Vector3(-originalPositionX, originalPositionY, -1);
             }
-            
+
             SortByYAxis(player1Assigned);
             SortByYAxis(player2Assigned);
-            
+
             // Log the sorted lists
             Debug.Log("Player 1 Assigned after sorting by Y-axis:");
             for (int i = 0; i < player1Assigned.Count; i++)
@@ -410,7 +417,7 @@ public class Main : MonoBehaviour
     }
 
     public bool CheckComplete()
-    { 
+    {
         // Check if both players have exactly 2 assigned items
         if (player1Assigned.Count != 2 || player2Assigned.Count != 2)
         {
@@ -446,22 +453,22 @@ public class Main : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        
+
         foreach (Transform child in GameObject.Find("Player2Recipe").transform)
         {
             Destroy(child.gameObject);
         }
-        
+
         foreach (Transform child in GameObject.Find("Player1Ingredients").transform)
         {
             Destroy(child.gameObject);
         }
-        
+
         foreach (Transform child in GameObject.Find("Player2Ingredients").transform)
         {
             Destroy(child.gameObject);
         }
-        
+
         player1Yummy.SetActive(false);
         player2Yummy.SetActive(false);
     }
@@ -471,7 +478,7 @@ public class Main : MonoBehaviour
         isPaused = true; // Set the pause flag
         StartCoroutine(PauseCoroutine());
     }
-    
+
     private IEnumerator PauseCoroutine()
     {
         Debug.Log("Pausing game...");
@@ -483,10 +490,10 @@ public class Main : MonoBehaviour
         InitialRound();
         TaskAssign();
         IngredientAssign();
-        
+
         isPaused = false; // Reset the pause flag
     }
-    
+
     private void OnApplicationQuit()
     {
         if (serialPort != null && serialPort.IsOpen)
