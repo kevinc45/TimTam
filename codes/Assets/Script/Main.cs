@@ -64,41 +64,57 @@ public class Main : MonoBehaviour
     {
         if (isPaused) return;
 
+        if (serialPort != null)
+        {
+            Debug.Log("Serial Port is not null");
+        }
+        if (serialPort.IsOpen)
+        {
+            Debug.Log("Serial Port is Open");
+        }
+        if (serialPort.BytesToRead > 0)
+        {
+            Debug.Log("BytesToRead > 0");
+        }
+        
         // Checks if Arduino connection successful
         if (serialPort != null && serialPort.IsOpen && serialPort.BytesToRead > 0)
         {
-
             string data = serialPort.ReadLine();
-            string[] distances = data.Split(','); // Data sent in (x1, x2) format, stored in an array
+            string[] distances = data.Split(','); // Data sent in (x1, x2, x3, x4, x5, x6) format, stored in an array
 
-            if (distances.Length == 2)
+            if (distances.Length == 6)
             {
                 // TryParse is to convert string to float, allow comparison.
-                if (float.TryParse(distances[0], out float distance1) && float.TryParse(distances[1], out float distance2))
+                if (float.TryParse(distances[0], out float player1Distance1) &&
+                    float.TryParse(distances[1], out float player1Distance2) &&
+                    float.TryParse(distances[2], out float player1Distance3) &&
+                    float.TryParse(distances[3], out float player2Distance1) &&
+                    float.TryParse(distances[4], out float player2Distance2) &&
+                    float.TryParse(distances[5], out float player2Distance3))
                 {
-                    if (distance1 < 20 && distance2 < 20)
-                    {
-                        P1KickIngredient(0);
+                    if (player1Distance1 < 20 && player1Distance2 < 20){
                         P1KickIngredient(1);
-                        P1KickIngredient(2);
-                        P1KickIngredient(3);
-                        P2KickIngredient(0);
-                        P2KickIngredient(1);
-                        P2KickIngredient(2);
-                        P2KickIngredient(3);
                     }
-                    else if (distance1 < 20)
-                    {
+                    else if (player1Distance1 < 20){
                         P1KickIngredient(0);
-                        P1KickIngredient(1);
+                    }
+                    else if (player1Distance2 < 20){
                         P1KickIngredient(2);
+                    }
+                    else if (player1Distance3 < 20){
                         P1KickIngredient(3);
                     }
-                    else if (distance2 < 20)
-                    {
-                        P2KickIngredient(0);
+                    else if (player2Distance1 < 20 && player2Distance2 < 20){
                         P2KickIngredient(1);
+                    }
+                    else if (player2Distance1 < 20){
+                        P2KickIngredient(0);
+                    }
+                    else if (player2Distance2 < 20){
                         P2KickIngredient(2);
+                    }
+                    else if (player2Distance3 < 20){
                         P2KickIngredient(3);
                     }
                 }
