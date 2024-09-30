@@ -30,7 +30,7 @@ public class Main : MonoBehaviour
     public GameObject player1Yummy;
     public GameObject player2Yummy;
 
-    Arduino connection    
+    // Arduino connection    
     private SerialPort serialPort;
     public string portName = "COM16"; // Change this depend on the Arduino's port
     public int baudRate = 9600;
@@ -50,7 +50,7 @@ public class Main : MonoBehaviour
         TaskAssign();
         IngredientAssign();
         
-        Initiating Arduino Connection
+        // Initiating Arduino Connection
         serialPort = new SerialPort(portName, baudRate);
         if (!serialPort.IsOpen)
         {
@@ -64,7 +64,7 @@ public class Main : MonoBehaviour
     {
         if (isPaused) return;
         
-        Checks if Arduino connection successful
+        // Checks if Arduino connection successful
         if (serialPort != null && serialPort.IsOpen && serialPort.BytesToRead > 0)
         {
             
