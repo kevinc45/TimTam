@@ -1,13 +1,13 @@
 // The code is for the second Arduino board (Player 2)
 
-#define P2_ECHO_PIN_1 2
-#define P2_TRIG_PIN_1 3
-#define P2_ECHO_PIN_2 4
-#define P2_TRIG_PIN_2 5
-#define P2_ECHO_PIN_3 6
-#define P2_TRIG_PIN_3 7
-#define P2_ECHO_PIN_4 8
-#define P2_TRIG_PIN_4 9
+#define P2_ECHO_PIN_1 3
+#define P2_TRIG_PIN_1 4
+#define P2_ECHO_PIN_2 5
+#define P2_TRIG_PIN_2 6
+#define P2_ECHO_PIN_3 7
+#define P2_TRIG_PIN_3 8
+#define P2_ECHO_PIN_4 9
+#define P2_TRIG_PIN_4 10
 
 void setup() {
   Serial.begin(9600);
