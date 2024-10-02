@@ -31,8 +31,10 @@ public class Main : MonoBehaviour
     public GameObject player2Yummy;
 
     // Arduino connection    
-    private SerialPort serialPort;
-    public string portName = "COM16"; // Change this depend on the Arduino's port
+    private SerialPort serialPort1;
+    private SerialPort serialPort2;
+    public string portName1 = "COM16"; // Change this depend on the FIRST Arduino's port
+    public string portName2 = "COM19"; // Change this depend on the SECOND Arduino's port
     public int baudRate = 9600;
 
     // Start is called before the first frame update
@@ -51,11 +53,18 @@ public class Main : MonoBehaviour
         IngredientAssign();
 
         // Initiating Arduino Connection
-        serialPort = new SerialPort(portName, baudRate);
-        if (!serialPort.IsOpen)
+        serialPort1 = new SerialPort(portName1, baudRate);
+        serialPort2 = new SerialPort(portName2, baudRate);
+
+        if (!serialPort1.IsOpen)
         {
-            serialPort.Open();
-            serialPort.ReadTimeout = 1000;
+            serialPort1.Open();
+            serialPort1.ReadTimeout = 1000;
+        }
+        if (!serialPort2.IsOpen)
+        {
+            serialPort2.Open();
+            serialPort2.ReadTimeout = 1000;
         }
     }
 
@@ -64,57 +73,71 @@ public class Main : MonoBehaviour
     {
         if (isPaused) return;
 
-        if (serialPort != null)
-        {
-            Debug.Log("Serial Port is not null");
-        }
-        if (serialPort.IsOpen)
-        {
-            Debug.Log("Serial Port is Open");
-        }
-        if (serialPort.BytesToRead > 0)
-        {
-            Debug.Log("BytesToRead > 0");
-        }
+        // if (serialPort != null)
+        // {
+        //     Debug.Log("Serial Port is not null");
+        // }
+        // if (serialPort.IsOpen)
+        // {
+        //     Debug.Log("Serial Port is Open");
+        // }
+        // if (serialPort.BytesToRead > 0)
+        // {
+        //     Debug.Log("BytesToRead > 0");
+        // }
         
-        // Checks if Arduino connection successful
-        if (serialPort != null && serialPort.IsOpen && serialPort.BytesToRead > 0)
+        // Arduino 1, Player 1
+        if (serialPort1 != null && serialPort1.IsOpen && serialPort1.BytesToRead > 0)
         {
-            string data = serialPort.ReadLine();
-            string[] distances = data.Split(','); // Data sent in (x1, x2, x3, x4, x5, x6) format, stored in an array
+            string data1 = serialPort1.ReadLine();
+            string[] distances1 = data1.Split(',');
 
-            if (distances.Length == 6)
+            if (distances1.Length == 4)
             {
-                // TryParse is to convert string to float, allow comparison.
-                if (float.TryParse(distances[0], out float player1Distance1) &&
-                    float.TryParse(distances[1], out float player1Distance2) &&
-                    float.TryParse(distances[2], out float player1Distance3) &&
-                    float.TryParse(distances[3], out float player2Distance1) &&
-                    float.TryParse(distances[4], out float player2Distance2) &&
-                    float.TryParse(distances[5], out float player2Distance3))
+                if (float.TryParse(distances1[0], out float player1Distance1) &&
+                    float.TryParse(distances1[1], out float player1Distance2) &&
+                    float.TryParse(distances1[2], out float player1Distance3) &&
+                    float.TryParse(distances1[3], out float player1Distance4))
                 {
-                    if (player1Distance1 < 20 && player1Distance2 < 20){
-                        P1KickIngredient(1);
-                    }
-                    else if (player1Distance1 < 20){
+                    if (player1Distance1 < 20){
                         P1KickIngredient(0);
                     }
                     else if (player1Distance2 < 20){
-                        P1KickIngredient(2);
+                        P1KickIngredient(1);
                     }
                     else if (player1Distance3 < 20){
+                        P1KickIngredient(2);
+                    }
+                    else if (player1Distance4 < 20){
                         P1KickIngredient(3);
                     }
-                    else if (player2Distance1 < 20 && player2Distance2 < 20){
-                        P2KickIngredient(1);
-                    }
-                    else if (player2Distance1 < 20){
+                }
+            }
+        }
+
+        // Arduino 2, Player 2
+        if (serialPort2 != null && serialPort2.IsOpen && serialPort2.BytesToRead > 0)
+        {
+            string data2 = serialPort2.ReadLine();
+            string[] distances2 = data2.Split(',');
+
+            if (distances2.Length == 4)
+            {
+                if (float.TryParse(distances2[0], out float player2Distance1) &&
+                    float.TryParse(distances2[1], out float player2Distance2) &&
+                    float.TryParse(distances2[2], out float player2Distance3) &&
+                    float.TryParse(distances2[3], out float player2Distance4))
+                {
+                    if (player2Distance1 < 20){
                         P2KickIngredient(0);
                     }
                     else if (player2Distance2 < 20){
-                        P2KickIngredient(2);
+                        P2KickIngredient(1);
                     }
                     else if (player2Distance3 < 20){
+                        P2KickIngredient(2);
+                    }
+                    else if (player2Distance4 < 20){
                         P2KickIngredient(3);
                     }
                 }
