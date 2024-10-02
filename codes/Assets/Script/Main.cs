@@ -99,16 +99,16 @@ public class Main : MonoBehaviour
                     float.TryParse(distances1[2], out float player1Distance3) &&
                     float.TryParse(distances1[3], out float player1Distance4))
                 {
-                    if (player1Distance1 < 20){
+                    if (player1Distance1 < 75){
                         P1KickIngredient(0);
                     }
-                    else if (player1Distance2 < 20){
+                    else if (player1Distance2 < 75){
                         P1KickIngredient(1);
                     }
-                    else if (player1Distance3 < 20){
+                    else if (player1Distance3 < 75){
                         P1KickIngredient(2);
                     }
-                    else if (player1Distance4 < 20){
+                    else if (player1Distance4 < 75){
                         P1KickIngredient(3);
                     }
                 }
@@ -128,16 +128,16 @@ public class Main : MonoBehaviour
                     float.TryParse(distances2[2], out float player2Distance3) &&
                     float.TryParse(distances2[3], out float player2Distance4))
                 {
-                    if (player2Distance1 < 20){
+                    if (player2Distance1 < 75){
                         P2KickIngredient(0);
                     }
-                    else if (player2Distance2 < 20){
+                    else if (player2Distance2 < 75){
                         P2KickIngredient(1);
                     }
-                    else if (player2Distance3 < 20){
+                    else if (player2Distance3 < 75){
                         P2KickIngredient(2);
                     }
-                    else if (player2Distance4 < 20){
+                    else if (player2Distance4 < 75){
                         P2KickIngredient(3);
                     }
                 }
@@ -535,9 +535,13 @@ public class Main : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        if (serialPort != null && serialPort.IsOpen)
+        if (serialPort1 != null && serialPort1.IsOpen)
         {
-            serialPort.Close();
+            serialPort1.Close();
+        }
+        if (serialPort2 != null && serialPort2.IsOpen)
+        {
+            serialPort2.Close();
         }
     }
 }
