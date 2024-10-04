@@ -18,6 +18,8 @@ public class Main : MonoBehaviour
     public Sprite greenLightSprite;
     public Sprite startSprite;
     public Sprite timesUpSprite;
+
+    public AudioSource yummyAudio;
     
     private bool isPaused = false;
     public float totalTime = 10;
@@ -190,6 +192,7 @@ public class Main : MonoBehaviour
             CountdownTime();
             if (CheckComplete())
             {
+                yummyAudio.Play();
                 player1Yummy.SetActive(true);
                 player2Yummy.SetActive(true);
                 PauseForTwoSeconds();
