@@ -13,7 +13,12 @@ public class Main : MonoBehaviour
     public Sprite capsicumSprite;
     public Sprite beerSprite;
     public Sprite yummySprite;
-
+    public Sprite redLightSprite;
+    public Sprite yellowLightSprite;
+    public Sprite greenLightSprite;
+    public Sprite startSprite;
+    public Sprite timesUpSprite;
+    
     private bool isPaused = false;
     public float totalTime = 10;
 
@@ -45,27 +50,30 @@ public class Main : MonoBehaviour
         player2RecipePosition[0] = new Vector3(1.03f, 1.23f, -1f);
         player2RecipePosition[1] = new Vector3(1.2200001f, -0.98f, -1f);
 
+        String[] startLight = {"red", "yellow", "green", "start"};
+        StartLight(startLight);
+        
         // Time limitation for each round
-        CountdownTime();
+        
 
         // Assign recipe tasks to both players
         TaskAssign();
         IngredientAssign();
 
         // Initiating Arduino Connection
-        serialPort1 = new SerialPort(portName1, baudRate);
-        serialPort2 = new SerialPort(portName2, baudRate);
-
-        if (!serialPort1.IsOpen)
-        {
-            serialPort1.Open();
-            serialPort1.ReadTimeout = 1000;
-        }
-        if (!serialPort2.IsOpen)
-        {
-            serialPort2.Open();
-            serialPort2.ReadTimeout = 1000;
-        }
+        // serialPort1 = new SerialPort(portName1, baudRate);
+        // serialPort2 = new SerialPort(portName2, baudRate);
+        //
+        // if (!serialPort1.IsOpen)
+        // {
+        //     serialPort1.Open();
+        //     serialPort1.ReadTimeout = 1000;
+        // }
+        // if (!serialPort2.IsOpen)
+        // {
+        //     serialPort2.Open();
+        //     serialPort2.ReadTimeout = 1000;
+        // }
     }
 
     // Update is called once per frame
@@ -81,68 +89,68 @@ public class Main : MonoBehaviour
         // {
         //     Debug.Log("Serial Port is Open");
         // }
-        // if (serialPort.BytesToRead > 0)
+        // if (serialPort.ByoRead > 0)
         // {
-        //     Debug.Log("BytesToRead > 0");
+        //     Debug.Log("ByoRead > 0");
         // }
         
         // Arduino 1, Player 1
-        if (serialPort1 != null && serialPort1.IsOpen && serialPort1.BytesToRead > 0)
-        {
-            string data1 = serialPort1.ReadLine();
-            string[] distances1 = data1.Split(',');
-
-            if (distances1.Length == 4)
-            {
-                if (float.TryParse(distances1[0], out float player1Distance1) &&
-                    float.TryParse(distances1[1], out float player1Distance2) &&
-                    float.TryParse(distances1[2], out float player1Distance3) &&
-                    float.TryParse(distances1[3], out float player1Distance4))
-                {
-                    if (player1Distance1 < 75){
-                        P1KickIngredient(0);
-                    }
-                    else if (player1Distance2 < 75){
-                        P1KickIngredient(1);
-                    }
-                    else if (player1Distance3 < 75){
-                        P1KickIngredient(2);
-                    }
-                    else if (player1Distance4 < 75){
-                        P1KickIngredient(3);
-                    }
-                }
-            }
-        }
+        // if (serialPort1 != null && serialPort1.IsOpen && serialPort1.ByoRead > 0)
+        // {
+        //     string data1 = serialPort1.ReadLine();
+        //     string[] distances1 = data1.Split(',');
+        //
+        //     if (distances1.Length == 4)
+        //     {
+        //         if (float.TryParse(distances1[0], out float player1Distance1) &&
+        //             float.TryParse(distances1[1], out float player1Distance2) &&
+        //             float.TryParse(distances1[2], out float player1Distance3) &&
+        //             float.TryParse(distances1[3], out float player1Distance4))
+        //         {
+        //             if (player1Distance1 < 75){
+        //                 P1KickIngredient(0);
+        //             }
+        //             else if (player1Distance2 < 75){
+        //                 P1KickIngredient(1);
+        //             }
+        //             else if (player1Distance3 < 75){
+        //                 P1KickIngredient(2);
+        //             }
+        //             else if (player1Distance4 < 75){
+        //                 P1KickIngredient(3);
+        //             }
+        //         }
+        //     }
+        // }
 
         // Arduino 2, Player 2
-        if (serialPort2 != null && serialPort2.IsOpen && serialPort2.BytesToRead > 0)
-        {
-            string data2 = serialPort2.ReadLine();
-            string[] distances2 = data2.Split(',');
-
-            if (distances2.Length == 4)
-            {
-                if (float.TryParse(distances2[0], out float player2Distance1) &&
-                    float.TryParse(distances2[1], out float player2Distance2) &&
-                    float.TryParse(distances2[2], out float player2Distance3) &&
-                    float.TryParse(distances2[3], out float player2Distance4))
-                {
-                    if (player2Distance1 < 75){
-                        P2KickIngredient(0);
-                    }
-                    else if (player2Distance2 < 75){
-                        P2KickIngredient(1);
-                    }
-                    else if (player2Distance3 < 75){
-                        P2KickIngredient(2);
-                    }
-                    else if (player2Distance4 < 75){
-                        P2KickIngredient(3);
-                    }
-                }
-            }
-        }
+        // if (serialPort2 != null && serialPort2.IsOpen && serialPort2.ByoRead > 0)
+        // {
+        //     string data2 = serialPort2.ReadLine();
+        //     string[] distances2 = data2.Split(',');
+        //
+        //     if (distances2.Length == 4)
+        //     {
+        //         if (float.TryParse(distances2[0], out float player2Distance1) &&
+        //             float.TryParse(distances2[1], out float player2Distance2) &&
+        //             float.TryParse(distances2[2], out float player2Distance3) &&
+        //             float.TryParse(distances2[3], out float player2Distance4))
+        //         {
+        //             if (player2Distance1 < 75){
+        //                 P2KickIngredient(0);
+        //             }
+        //             else if (player2Distance2 < 75){
+        //                 P2KickIngredient(1);
+        //             }
+        //             else if (player2Distance3 < 75){
+        //                 P2KickIngredient(2);
+        //             }
+        //             else if (player2Distance4 < 75){
+        //                 P2KickIngredient(3);
+        //             }
+        //         }
+        //     }
+        // }
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -189,6 +197,8 @@ public class Main : MonoBehaviour
         }
         else
         {
+            Debug.Log("TOTALTIME<0");
+            TimesUp();
             Debug.Break();
         }
     }
@@ -238,6 +248,21 @@ public class Main : MonoBehaviour
             case "yummy":
                 spriteRenderer.sprite = yummySprite;
                 break;
+            case "red":
+                spriteRenderer.sprite = redLightSprite;
+                break;
+            case "yellow":
+                spriteRenderer.sprite = yellowLightSprite;
+                break;
+            case "green":
+                spriteRenderer.sprite = greenLightSprite;
+                break;
+            case "start":
+                spriteRenderer.sprite = startSprite;
+                break;
+            case "timesUp":
+                spriteRenderer.sprite = timesUpSprite;
+                break;
         }
         return ingredient;
     }
@@ -276,7 +301,7 @@ public class Main : MonoBehaviour
     public void SetPosition(GameObject ingredient, Vector3 position)
     {
         ingredient.transform.position = position;
-        ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f); // Uniform scaling
+        ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.3f); // Uniform scaling
     }
 
     // Ingredients assign
@@ -291,14 +316,14 @@ public class Main : MonoBehaviour
             player1Ingredient.name = player1Task[i];
             Vector3 p1Position;
             bool positionValid;
-
+            
             do
             {
                 positionValid = true;
                 float randomX = Mathf.Round(UnityEngine.Random.Range(2.5f, 4f) * 10) / 10;
                 float randomY = Mathf.Round(UnityEngine.Random.Range(-4f, 4f) * 10) / 10;
                 p1Position = new Vector3(randomX, randomY, -1);
-
+            
                 foreach (var ingredient in player2Assigned)
                 {
                     Debug.Log("Distance 2: " + Vector3.Distance(p1Position, ingredient.transform.position));
@@ -324,14 +349,14 @@ public class Main : MonoBehaviour
             player2Ingredient.name = player2Task[i];
             Vector3 p2Position;
             bool positionValid;
-
+            
             do
             {
                 positionValid = true;
                 float randomX = Mathf.Round(UnityEngine.Random.Range(-2.5f, -4f) * 10) / 10;
                 float randomY = Mathf.Round(UnityEngine.Random.Range(-4f, 4f) * 10) / 10;
-                p2Position = new Vector3(randomX, randomY, -1);
-
+                p2Position = new Vector3(randomX, randomY, -0.3f);
+            
                 foreach (var ingredient in player1Assigned)
                 {
                     Debug.Log("Distance 1: " + Vector3.Distance(p2Position, ingredient.transform.position));
@@ -362,46 +387,47 @@ public class Main : MonoBehaviour
         else
         {
             totalTime = 0;
+            
         }
     }
 
     public void P1KickIngredient(int index)
     {
-        if (index >= 0 && index < player1Assigned.Count)
+    if (index >= 0 && index < player1Assigned.Count)
+    {
+        float originalPositionX = player1Assigned[index].transform.position.x;
+        float originalPositionY = player1Assigned[index].transform.position.y;
+        player2Assigned.Add(player1Assigned[index]);
+        player1Assigned.RemoveAt(index);
+    
+        // Vector3 newPosition = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
+        if (player2Assigned.Count == 0)
         {
-            float originalPositionX = player1Assigned[index].transform.position.x;
-            float originalPositionY = player1Assigned[index].transform.position.y;
-            player2Assigned.Add(player1Assigned[index]);
-            player1Assigned.RemoveAt(index);
-
-            // Vector3 newPosition = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
-            if (player2Assigned.Count == 0)
-            {
-                // player2Assigned[0].transform.position = newPosition;
-                player2Assigned[0].transform.position = new Vector3(-originalPositionX, originalPositionY, -1);
-            }
-            else
-            {
-                // player2Assigned[player2Assigned.Count() - 1].transform.position = newPosition;
-                player2Assigned[player2Assigned.Count() - 1].transform.position = new Vector3(-originalPositionX, originalPositionY, -1);
-            }
-
-            SortByYAxis(player1Assigned);
-            SortByYAxis(player2Assigned);
-
-            // Log the sorted lists
-            Debug.Log("Player 1 Assigned after sorting by Y-axis:");
-            for (int i = 0; i < player1Assigned.Count; i++)
-            {
-                Debug.Log("Player 1 Assigned: " + player1Assigned[i].name + " Y: " + player1Assigned[i].transform.position.y);
-            }
-
-            Debug.Log("Player 2 Assigned after sorting by Y-axis:");
-            for (int i = 0; i < player2Assigned.Count; i++)
-            {
-                Debug.Log("Player 2 Assigned: " + player2Assigned[i].name + " Y: " + player2Assigned[i].transform.position.y);
-            }
+            // player2Assigned[0].transform.position = newPosition;
+            player2Assigned[0].transform.position = new Vector3(-originalPositionX, originalPositionY, -1);
         }
+        else
+        {
+            // player2Assigned[player2Assigned.Count() - 1].transform.position = newPosition;
+            player2Assigned[player2Assigned.Count() - 1].transform.position = new Vector3(-originalPositionX, originalPositionY, -1);
+        }
+    
+        SortByYAxis(player1Assigned);
+        SortByYAxis(player2Assigned);
+    
+        // Log the sorted lists
+        Debug.Log("Player 1 Assigned after sorting by Y-axis:");
+        for (int i = 0; i < player1Assigned.Count; i++)
+        {
+            Debug.Log("Player 1 Assigned: " + player1Assigned[i].name + " Y: " + player1Assigned[i].transform.position.y);
+        }
+        
+        Debug.Log("Player 2 Assigned after sorting by Y-axis:");
+        for (int i = 0; i < player2Assigned.Count; i++)
+        {
+            Debug.Log("Player 2 Assigned: " + player2Assigned[i].name + " Y: " + player2Assigned[i].transform.position.y);
+        }
+    }
     }
 
     public void P2KickIngredient(int index)
@@ -423,7 +449,7 @@ public class Main : MonoBehaviour
                 // player1Assigned[player1Assigned.Count() - 1].transform.position = newPosition;
                 player1Assigned[player1Assigned.Count() - 1].transform.position = new Vector3(-originalPositionX, originalPositionY, -1);
             }
-
+        
             SortByYAxis(player1Assigned);
             SortByYAxis(player2Assigned);
 
@@ -433,7 +459,7 @@ public class Main : MonoBehaviour
             {
                 Debug.Log("Player 1 Assigned: " + player1Assigned[i].name + " Y: " + player1Assigned[i].transform.position.y);
             }
-
+            
             Debug.Log("Player 2 Assigned after sorting by Y-axis:");
             for (int i = 0; i < player2Assigned.Count; i++)
             {
@@ -531,6 +557,68 @@ public class Main : MonoBehaviour
         IngredientAssign();
 
         isPaused = false; // Reset the pause flag
+    }
+    
+    
+    
+    public void StartLight(string[] lightNames)
+    {
+        StartCoroutine(StartLightCoroutine(lightNames));
+    }
+
+    private IEnumerator StartLightCoroutine(string[] lightNames)
+    {
+        for (int i = 0; i < lightNames.Length; i++)
+        {
+            GameObject player1Light = GameObject.Find("Player1Light");
+            GameObject player2Light = GameObject.Find("Player2Light");
+            GameObject p1TrafficLight = new GameObject(lightNames[i]);
+            GameObject p2TrafficLight = new GameObject(lightNames[i]);
+            p1TrafficLight.transform.SetParent(player1Light.transform);
+            p2TrafficLight.transform.SetParent(player2Light.transform);
+            p1TrafficLight.name = lightNames[i];
+            p2TrafficLight.name = lightNames[i];
+            SpriteRenderer(p1TrafficLight);
+            SpriteRenderer(p2TrafficLight);
+            p1TrafficLight.transform.position = new Vector3(-4.5f, -0.2f, -1.5f);
+            p1TrafficLight.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            p1TrafficLight.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+            p2TrafficLight.transform.position = new Vector3(4.5f, 0.1f, -1.5f);
+            p2TrafficLight.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            p2TrafficLight.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+            
+            // Wait for 1 second before proceeding to the next iteration
+            yield return new WaitForSeconds(0.8f);
+            
+            foreach (Transform child in GameObject.Find("Player1Light").transform)
+            {
+                Destroy(child.gameObject);
+            }
+            foreach (Transform child in GameObject.Find("Player2Light").transform)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+    }
+
+    public void TimesUp()
+    {
+        GameObject player1Light = GameObject.Find("Player1Light");
+        GameObject player2Light = GameObject.Find("Player2Light");
+        GameObject p1TimesUp = new GameObject();
+        GameObject p2TimesUp = new GameObject();
+        p1TimesUp.transform.SetParent(player1Light.transform);
+        p2TimesUp.transform.SetParent(player2Light.transform);
+        p1TimesUp.name = "timesUp";
+        p2TimesUp.name = "timesUp";
+        SpriteRenderer(p1TimesUp);
+        SpriteRenderer(p2TimesUp);
+        p1TimesUp.transform.position = new Vector3(-4.5f, 0.05f, -2f);
+        p1TimesUp.transform.localScale = new Vector3(0.45f, 0.45f, 0.45f);
+        p1TimesUp.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+        p2TimesUp.transform.position = new Vector3(4.5f, 0.05f, -2f);
+        p2TimesUp.transform.localScale = new Vector3(0.45f, 0.45f, 0.45f);
+        p2TimesUp.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
     }
 
     private void OnApplicationQuit()
