@@ -12,13 +12,20 @@ public class Main : MonoBehaviour
     public Sprite cheeseSprite;
     public Sprite capsicumSprite;
     public Sprite beerSprite;
+    
     public Sprite yummySprite;
+    
     public Sprite redLightSprite;
     public Sprite yellowLightSprite;
     public Sprite greenLightSprite;
     public Sprite startSprite;
     public Sprite timesUpSprite;
 
+    public Sprite pinkIngredientBgSprite;
+    public Sprite greenIngredientBgSprite;
+    public Sprite whiteIngredientBgSprite;
+    public Sprite beigeIngredientBgSprite;
+    
     public AudioSource yummyAudio;
     
     private bool isPaused = false;
@@ -47,10 +54,10 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player1RecipePosition[0] = new Vector3(-0.95f, 1.26999996f, -1f);
-        player1RecipePosition[1] = new Vector3(-0.9f, -0.99f, -1f);
-        player2RecipePosition[0] = new Vector3(1.03f, 1.23f, -1f);
-        player2RecipePosition[1] = new Vector3(1.2200001f, -0.98f, -1f);
+        player1RecipePosition[0] = new Vector3(-0.95f, 1.26999996f, -0.1f);
+        player1RecipePosition[1] = new Vector3(-0.9f, -0.99f, -0.1f);
+        player2RecipePosition[0] = new Vector3(1.03f, 1.23f, -0.1f);
+        player2RecipePosition[1] = new Vector3(1.2200001f, -0.98f, -0.1f);
 
         String[] startLight = {"red", "yellow", "green", "start"};
         StartLight(startLight);
@@ -60,7 +67,7 @@ public class Main : MonoBehaviour
 
         // Assign recipe tasks to both players
         TaskAssign();
-        IngredientAssign();
+        IngredientAssign();  
 
         // Initiating Arduino Connection
         // serialPort1 = new SerialPort(portName1, baudRate);
@@ -266,6 +273,18 @@ public class Main : MonoBehaviour
             case "timesUp":
                 spriteRenderer.sprite = timesUpSprite;
                 break;
+            case "pinkBg":
+                spriteRenderer.sprite = pinkIngredientBgSprite;
+                break;
+            case "whiteBg":
+                spriteRenderer.sprite = whiteIngredientBgSprite;
+                break;
+            case "greenBg":
+                spriteRenderer.sprite = greenIngredientBgSprite;
+                break;
+            case "beigeBg":
+                spriteRenderer.sprite = beigeIngredientBgSprite;
+                break;
         }
         return ingredient;
     }
@@ -329,7 +348,7 @@ public class Main : MonoBehaviour
             
                 foreach (var ingredient in player2Assigned)
                 {
-                    Debug.Log("Distance 2: " + Vector3.Distance(p1Position, ingredient.transform.position));
+                    // Debug.Log("Distance 2: " + Vector3.Distance(p1Position, ingredient.transform.position));
                     if (Vector3.Distance(p1Position, ingredient.transform.position) < 3.0f)
                     {
                         positionValid = false;
@@ -362,7 +381,7 @@ public class Main : MonoBehaviour
             
                 foreach (var ingredient in player1Assigned)
                 {
-                    Debug.Log("Distance 1: " + Vector3.Distance(p2Position, ingredient.transform.position));
+                    // Debug.Log("Distance 1: " + Vector3.Distance(p2Position, ingredient.transform.position));
                     if (Vector3.Distance(p2Position, ingredient.transform.position) < 3.0f)
                     {
                         positionValid = false;
@@ -378,8 +397,9 @@ public class Main : MonoBehaviour
             player2Ingredient.transform.SetParent(player2Parent.transform);
         }
         SortByYAxis(player1Assigned);
+        AddBackground(player1Assigned, player2Assigned);
     }
-
+    
     // Set countdown time
     public void CountdownTime()
     {
@@ -390,47 +410,48 @@ public class Main : MonoBehaviour
         else
         {
             totalTime = 0;
-            
         }
     }
 
     public void P1KickIngredient(int index)
     {
-    if (index >= 0 && index < player1Assigned.Count)
-    {
-        float originalPositionX = player1Assigned[index].transform.position.x;
-        float originalPositionY = player1Assigned[index].transform.position.y;
-        player2Assigned.Add(player1Assigned[index]);
-        player1Assigned.RemoveAt(index);
-    
-        // Vector3 newPosition = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
-        if (player2Assigned.Count == 0)
+        if (index >= 0 && index < player1Assigned.Count)
         {
-            // player2Assigned[0].transform.position = newPosition;
-            player2Assigned[0].transform.position = new Vector3(-originalPositionX, originalPositionY, -1);
-        }
-        else
-        {
-            // player2Assigned[player2Assigned.Count() - 1].transform.position = newPosition;
-            player2Assigned[player2Assigned.Count() - 1].transform.position = new Vector3(-originalPositionX, originalPositionY, -1);
-        }
-    
-        SortByYAxis(player1Assigned);
-        SortByYAxis(player2Assigned);
-    
-        // Log the sorted lists
-        Debug.Log("Player 1 Assigned after sorting by Y-axis:");
-        for (int i = 0; i < player1Assigned.Count; i++)
-        {
-            Debug.Log("Player 1 Assigned: " + player1Assigned[i].name + " Y: " + player1Assigned[i].transform.position.y);
+            float originalPositionX = player1Assigned[index].transform.position.x;
+            float originalPositionY = player1Assigned[index].transform.position.y;
+            player2Assigned.Add(player1Assigned[index]);
+            player1Assigned.RemoveAt(index);
+        
+            // Vector3 newPosition = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
+            if (player2Assigned.Count == 0)
+            {
+                // player2Assigned[0].transform.position = newPosition;
+                player2Assigned[0].transform.position = new Vector3(-originalPositionX, originalPositionY, -1);
+            }
+            else
+            {
+                // player2Assigned[player2Assigned.Count() - 1].transform.position = newPosition;
+                player2Assigned[player2Assigned.Count() - 1].transform.position = new Vector3(-originalPositionX, originalPositionY, -1);
+            }
+        
+            SortByYAxis(player1Assigned);
+            SortByYAxis(player2Assigned);
+        
+            // Log the sorted lists
+            Debug.Log("Player 1 Assigned after sorting by Y-axis:");
+            for (int i = 0; i < player1Assigned.Count; i++)
+            {
+                Debug.Log("Player 1 Assigned: " + player1Assigned[i].name + " Y: " + player1Assigned[i].transform.position.y);
+            }
+            
+            Debug.Log("Player 2 Assigned after sorting by Y-axis:");
+            for (int i = 0; i < player2Assigned.Count; i++)
+            {
+                Debug.Log("Player 2 Assigned: " + player2Assigned[i].name + " Y: " + player2Assigned[i].transform.position.y);
+            }
         }
         
-        Debug.Log("Player 2 Assigned after sorting by Y-axis:");
-        for (int i = 0; i < player2Assigned.Count; i++)
-        {
-            Debug.Log("Player 2 Assigned: " + player2Assigned[i].name + " Y: " + player2Assigned[i].transform.position.y);
-        }
-    }
+        AddBackground(player1Assigned, player2Assigned);
     }
 
     public void P2KickIngredient(int index)
@@ -468,6 +489,70 @@ public class Main : MonoBehaviour
             {
                 Debug.Log("Player 2 Assigned: " + player2Assigned[i].name + " Y: " + player2Assigned[i].transform.position.y);
             }
+        }
+        AddBackground(player1Assigned, player2Assigned);
+
+    }
+
+    public void AddBackground(List<GameObject> player1Assigned, List<GameObject> player2Assigned)
+    {
+        
+        foreach (Transform child in GameObject.Find("PlayersIngredientBg").transform)
+        {
+            Destroy(child.gameObject);
+        }
+        
+        Debug.Log("playerAssigned: " + player1Assigned.Count);
+        for (int i = 0; i < player1Assigned.Count(); i++)
+        {
+            GameObject ingredientBg = new GameObject();
+            ingredientBg.transform.SetParent(GameObject.Find("PlayersIngredientBg").transform);
+
+            if (i == 0)
+            {
+                Debug.Log("[1] pink");
+                ingredientBg.name = "pinkBg";
+            } else if (i == 1)
+            {
+                Debug.Log("[2] white");
+                ingredientBg.name = "whiteBg";
+            } else if (i == 2)
+            {
+                Debug.Log("[3] green");
+                ingredientBg.name = "greenBg";
+            } else if (i == 3)
+            {
+                Debug.Log("[4] beige");
+                ingredientBg.name = "beigeBg";
+            }
+
+            SpriteRenderer(ingredientBg);
+            ingredientBg.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            ingredientBg.transform.position = new Vector3(player1Assigned[i].transform.position.x, player1Assigned[i].transform.position.y, player1Assigned[i].transform.position.z+0.1f);
+        }
+        
+        for (int i = 0; i < player2Assigned.Count(); i++)
+        {
+            GameObject ingredientBg = new GameObject();
+            ingredientBg.transform.SetParent(GameObject.Find("PlayersIngredientBg").transform);
+
+            if (i == 0)
+            {
+                ingredientBg.name = "pinkBg";
+            } else if (i == 1)
+            {
+                ingredientBg.name = "whiteBg";
+            } else if (i == 2)
+            {
+                ingredientBg.name = "greenBg";
+            } else if (i == 3)
+            {
+                ingredientBg.name = "beigeBg";
+            }
+
+            SpriteRenderer(ingredientBg);
+            ingredientBg.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            ingredientBg.transform.position = new Vector3(player2Assigned[i].transform.position.x, player2Assigned[i].transform.position.y, player2Assigned[i].transform.position.z+0.2f);
         }
     }
 
@@ -561,8 +646,6 @@ public class Main : MonoBehaviour
 
         isPaused = false; // Reset the pause flag
     }
-    
-    
     
     public void StartLight(string[] lightNames)
     {
