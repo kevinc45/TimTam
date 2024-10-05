@@ -54,10 +54,14 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player1RecipePosition[0] = new Vector3(-0.95f, 1.26999996f, -0.1f);
-        player1RecipePosition[1] = new Vector3(-0.9f, -0.99f, -0.1f);
-        player2RecipePosition[0] = new Vector3(1.03f, 1.23f, -0.1f);
-        player2RecipePosition[1] = new Vector3(1.2200001f, -0.98f, -0.1f);
+        // player1RecipePosition[0] = new Vector3(-0.95f, 1.26999996f, -2f);
+        // player1RecipePosition[1] = new Vector3(-0.9f, -0.99f, -2f);
+        // player2RecipePosition[0] = new Vector3(1.03f, 1.23f, -2f);
+        // player2RecipePosition[1] = new Vector3(1.2200001f, -0.98f, -2f);
+        player1RecipePosition[0] = new Vector3(1.3f, -1.6f, -2f);
+        player1RecipePosition[1] = new Vector3(1.3f, 1f, -2f);
+        player2RecipePosition[0] = new Vector3(-2f, -1.6f, -2f);
+        player2RecipePosition[1] = new Vector3(-2f, 1f, -2f);
 
         String[] startLight = {"red", "yellow", "green", "start"};
         StartLight(startLight);
@@ -207,7 +211,6 @@ public class Main : MonoBehaviour
         }
         else
         {
-            Debug.Log("TOTALTIME<0");
             TimesUp();
             Debug.Break();
         }
@@ -301,29 +304,30 @@ public class Main : MonoBehaviour
         for (int i = 0; i < player1Task.Length; i++)
         {
             GameObject ingredient = new GameObject(player1Task[i]);
+            ingredient.transform.SetParent(player1Parent.transform);
             SpriteRenderer(ingredient);
             SetPosition(ingredient, player1RecipePosition[i]); // Assign specific position
-            ingredient.transform.SetParent(player1Parent.transform);
+            
         }
 
         // Create and place objects for player 2's tasks
         for (int i = 0; i < player2Task.Length; i++)
         {
             GameObject ingredient = new GameObject(player2Task[i]);
+            ingredient.transform.SetParent(player2Parent.transform);
             SpriteRenderer(ingredient);
             SetPosition(ingredient, player2RecipePosition[i]); // Assign specific position
-            ingredient.transform.SetParent(player2Parent.transform);
         }
 
-        Debug.Log("Player 1 Tasks: " + string.Join(", ", player1Task));
-        Debug.Log("Player 2 Tasks: " + string.Join(", ", player2Task));
+        // Debug.Log("Player 1 Tasks: " + string.Join(", ", player1Task));
+        // Debug.Log("Player 2 Tasks: " + string.Join(", ", player2Task));
     }
 
     // Set position and scale for each ingredient
     public void SetPosition(GameObject ingredient, Vector3 position)
     {
-        ingredient.transform.position = position;
-        ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.3f); // Uniform scaling
+        ingredient.transform.localPosition = position;
+        ingredient.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f); // Uniform scaling
     }
 
     // Ingredients assign
@@ -342,13 +346,13 @@ public class Main : MonoBehaviour
             do
             {
                 positionValid = true;
-                float randomX = Mathf.Round(UnityEngine.Random.Range(2.5f, 4f) * 10) / 10;
+                float randomX = Mathf.Round(UnityEngine.Random.Range(2.8f, 7.5f) * 10) / 10;
                 float randomY = Mathf.Round(UnityEngine.Random.Range(-4f, 4f) * 10) / 10;
-                p1Position = new Vector3(randomX, randomY, -1);
+                p1Position = new Vector3(randomX, randomY, -1f);
             
                 foreach (var ingredient in player2Assigned)
                 {
-                    // Debug.Log("Distance 2: " + Vector3.Distance(p1Position, ingredient.transform.position));
+                    Debug.Log("Distance 2: " + Vector3.Distance(p1Position, ingredient.transform.position));
                     if (Vector3.Distance(p1Position, ingredient.transform.position) < 3.0f)
                     {
                         positionValid = false;
@@ -356,12 +360,13 @@ public class Main : MonoBehaviour
                     }
                 }
             } while (!positionValid);
-
-            player1Ingredient.transform.position = p1Position;
+            
+            player1Ingredient.transform.SetParent(player1Parent.transform);
+            player1Ingredient.transform.localPosition = p1Position;
             // player1Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(2.5f, 4f), UnityEngine.Random.Range(-4f, 4f), -1);
             player1Ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             player2Assigned.Add(SpriteRenderer(player1Ingredient));  // change the player1Assigned to list
-            player1Ingredient.transform.SetParent(player1Parent.transform);
+            
         }
         SortByYAxis(player2Assigned);
 
@@ -375,26 +380,27 @@ public class Main : MonoBehaviour
             do
             {
                 positionValid = true;
-                float randomX = Mathf.Round(UnityEngine.Random.Range(-2.5f, -4f) * 10) / 10;
+                float randomX = Mathf.Round(UnityEngine.Random.Range(-3f, -7.5f) * 10) / 10;
                 float randomY = Mathf.Round(UnityEngine.Random.Range(-4f, 4f) * 10) / 10;
-                p2Position = new Vector3(randomX, randomY, -0.3f);
+                p2Position = new Vector3(randomX, randomY, -1f);
             
                 foreach (var ingredient in player1Assigned)
                 {
-                    // Debug.Log("Distance 1: " + Vector3.Distance(p2Position, ingredient.transform.position));
+                    Debug.Log("Distance 1: " + Vector3.Distance(p2Position, ingredient.transform.position));
                     if (Vector3.Distance(p2Position, ingredient.transform.position) < 3.0f)
                     {
+                        Debug.Log("not short");
                         positionValid = false;
                         break;
                     }
                 }
             } while (!positionValid);
 
-            player2Ingredient.transform.position = p2Position;
+            player2Ingredient.transform.SetParent(player2Parent.transform);
+            player2Ingredient.transform.localPosition = p2Position;
             // player2Ingredient.transform.position = new Vector3(UnityEngine.Random.Range(-2.5f, -4f), UnityEngine.Random.Range(-4f, 4f), -1);
             player2Ingredient.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             player1Assigned.Add(SpriteRenderer(player2Ingredient));  // change the player2Assigned to list
-            player2Ingredient.transform.SetParent(player2Parent.transform);
         }
         SortByYAxis(player1Assigned);
         AddBackground(player1Assigned, player2Assigned);
@@ -417,8 +423,8 @@ public class Main : MonoBehaviour
     {
         if (index >= 0 && index < player1Assigned.Count)
         {
-            float originalPositionX = player1Assigned[index].transform.position.x;
-            float originalPositionY = player1Assigned[index].transform.position.y;
+            float originalPositionX = player1Assigned[index].transform.localPosition.x;
+            float originalPositionY = player1Assigned[index].transform.localPosition.y;
             player2Assigned.Add(player1Assigned[index]);
             player1Assigned.RemoveAt(index);
         
@@ -426,29 +432,29 @@ public class Main : MonoBehaviour
             if (player2Assigned.Count == 0)
             {
                 // player2Assigned[0].transform.position = newPosition;
-                player2Assigned[0].transform.position = new Vector3(-originalPositionX, originalPositionY, -1);
+                player2Assigned[0].transform.localPosition = new Vector3(-originalPositionX, originalPositionY, -1);
             }
             else
             {
                 // player2Assigned[player2Assigned.Count() - 1].transform.position = newPosition;
-                player2Assigned[player2Assigned.Count() - 1].transform.position = new Vector3(-originalPositionX, originalPositionY, -1);
+                player2Assigned[player2Assigned.Count() - 1].transform.localPosition = new Vector3(-originalPositionX, originalPositionY, -1);
             }
         
             SortByYAxis(player1Assigned);
             SortByYAxis(player2Assigned);
         
             // Log the sorted lists
-            Debug.Log("Player 1 Assigned after sorting by Y-axis:");
-            for (int i = 0; i < player1Assigned.Count; i++)
-            {
-                Debug.Log("Player 1 Assigned: " + player1Assigned[i].name + " Y: " + player1Assigned[i].transform.position.y);
-            }
-            
-            Debug.Log("Player 2 Assigned after sorting by Y-axis:");
-            for (int i = 0; i < player2Assigned.Count; i++)
-            {
-                Debug.Log("Player 2 Assigned: " + player2Assigned[i].name + " Y: " + player2Assigned[i].transform.position.y);
-            }
+            // Debug.Log("Player 1 Assigned after sorting by Y-axis:");
+            // for (int i = 0; i < player1Assigned.Count; i++)
+            // {
+            //     Debug.Log("Player 1 Assigned: " + player1Assigned[i].name + " Y: " + player1Assigned[i].transform.position.y);
+            // }
+            //
+            // Debug.Log("Player 2 Assigned after sorting by Y-axis:");
+            // for (int i = 0; i < player2Assigned.Count; i++)
+            // {
+            //     Debug.Log("Player 2 Assigned: " + player2Assigned[i].name + " Y: " + player2Assigned[i].transform.position.y);
+            // }
         }
         
         AddBackground(player1Assigned, player2Assigned);
@@ -458,37 +464,37 @@ public class Main : MonoBehaviour
     {
         if (index >= 0 && index < player2Assigned.Count)
         {
-            float originalPositionX = player2Assigned[index].transform.position.x;
-            float originalPositionY = player2Assigned[index].transform.position.y;
+            float originalPositionX = player2Assigned[index].transform.localPosition.x;
+            float originalPositionY = player2Assigned[index].transform.localPosition.y;
             player1Assigned.Add(player2Assigned[index]);
             player2Assigned.RemoveAt(index);
             // Vector3 newPosition = new Vector3(UnityEngine.Random.Range(-2.5f, -4f), UnityEngine.Random.Range(-4f, 4f), -1);
             if (player1Assigned.Count == 0)
             {
                 // player1Assigned[0].transform.position = newPosition;
-                player1Assigned[0].transform.position = new Vector3(-originalPositionX, originalPositionY, -1);
+                player1Assigned[0].transform.localPosition = new Vector3(-originalPositionX, originalPositionY, -1);
             }
             else
             {
                 // player1Assigned[player1Assigned.Count() - 1].transform.position = newPosition;
-                player1Assigned[player1Assigned.Count() - 1].transform.position = new Vector3(-originalPositionX, originalPositionY, -1);
+                player1Assigned[player1Assigned.Count() - 1].transform.localPosition = new Vector3(-originalPositionX, originalPositionY, -1);
             }
         
             SortByYAxis(player1Assigned);
             SortByYAxis(player2Assigned);
 
             // Log the sorted lists
-            Debug.Log("Player 1 Assigned after sorting by Y-axis:");
-            for (int i = 0; i < player1Assigned.Count; i++)
-            {
-                Debug.Log("Player 1 Assigned: " + player1Assigned[i].name + " Y: " + player1Assigned[i].transform.position.y);
-            }
-            
-            Debug.Log("Player 2 Assigned after sorting by Y-axis:");
-            for (int i = 0; i < player2Assigned.Count; i++)
-            {
-                Debug.Log("Player 2 Assigned: " + player2Assigned[i].name + " Y: " + player2Assigned[i].transform.position.y);
-            }
+            // Debug.Log("Player 1 Assigned after sorting by Y-axis:");
+            // for (int i = 0; i < player1Assigned.Count; i++)
+            // {
+            //     Debug.Log("Player 1 Assigned: " + player1Assigned[i].name + " Y: " + player1Assigned[i].transform.position.y);
+            // }
+            //
+            // Debug.Log("Player 2 Assigned after sorting by Y-axis:");
+            // for (int i = 0; i < player2Assigned.Count; i++)
+            // {
+            //     Debug.Log("Player 2 Assigned: " + player2Assigned[i].name + " Y: " + player2Assigned[i].transform.position.y);
+            // }
         }
         AddBackground(player1Assigned, player2Assigned);
 
@@ -502,7 +508,7 @@ public class Main : MonoBehaviour
             Destroy(child.gameObject);
         }
         
-        Debug.Log("playerAssigned: " + player1Assigned.Count);
+        // Debug.Log("playerAssigned: " + player1Assigned.Count);
         for (int i = 0; i < player1Assigned.Count(); i++)
         {
             GameObject ingredientBg = new GameObject();
@@ -510,25 +516,21 @@ public class Main : MonoBehaviour
 
             if (i == 0)
             {
-                Debug.Log("[1] pink");
                 ingredientBg.name = "pinkBg";
             } else if (i == 1)
             {
-                Debug.Log("[2] white");
                 ingredientBg.name = "whiteBg";
             } else if (i == 2)
             {
-                Debug.Log("[3] green");
                 ingredientBg.name = "greenBg";
             } else if (i == 3)
             {
-                Debug.Log("[4] beige");
                 ingredientBg.name = "beigeBg";
             }
 
             SpriteRenderer(ingredientBg);
-            ingredientBg.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-            ingredientBg.transform.position = new Vector3(player1Assigned[i].transform.position.x, player1Assigned[i].transform.position.y, player1Assigned[i].transform.position.z+0.1f);
+            ingredientBg.transform.localScale = new Vector3(0.1f, 0.1f, -1f);
+            ingredientBg.transform.localPosition = new Vector3(player1Assigned[i].transform.localPosition.x, player1Assigned[i].transform.localPosition.y, 0.5f);
         }
         
         for (int i = 0; i < player2Assigned.Count(); i++)
@@ -551,7 +553,7 @@ public class Main : MonoBehaviour
             }
 
             SpriteRenderer(ingredientBg);
-            ingredientBg.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            ingredientBg.transform.localScale = new Vector3(0.1f, 0.1f, -1f);
             ingredientBg.transform.position = new Vector3(player2Assigned[i].transform.position.x, player2Assigned[i].transform.position.y, player2Assigned[i].transform.position.z+0.2f);
         }
     }
@@ -634,11 +636,11 @@ public class Main : MonoBehaviour
 
     private IEnumerator PauseCoroutine()
     {
-        Debug.Log("Pausing game...");
+        // Debug.Log("Pausing game...");
         Time.timeScale = 0; // Pause the game
         yield return new WaitForSecondsRealtime(2); // Wait for 1 real seconds
         Time.timeScale = 1; // Resume the game
-        Debug.Log("Resuming game...");
+        // Debug.Log("Resuming game...");
         DestoryGameObject();
         InitialRound();
         TaskAssign();
@@ -666,10 +668,10 @@ public class Main : MonoBehaviour
             p2TrafficLight.name = lightNames[i];
             SpriteRenderer(p1TrafficLight);
             SpriteRenderer(p2TrafficLight);
-            p1TrafficLight.transform.position = new Vector3(-4.5f, -0.2f, -1.5f);
+            p1TrafficLight.transform.localPosition = new Vector3(-4.5f, -0.2f, 3f);
             p1TrafficLight.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             p1TrafficLight.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
-            p2TrafficLight.transform.position = new Vector3(4.5f, 0.1f, -1.5f);
+            p2TrafficLight.transform.localPosition = new Vector3(5f, 0.1f, 3f);
             p2TrafficLight.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             p2TrafficLight.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
             
@@ -699,10 +701,10 @@ public class Main : MonoBehaviour
         p2TimesUp.name = "timesUp";
         SpriteRenderer(p1TimesUp);
         SpriteRenderer(p2TimesUp);
-        p1TimesUp.transform.position = new Vector3(-4.5f, 0.05f, -2f);
+        p1TimesUp.transform.position = new Vector3(-4.5f, 0.05f, 3f);
         p1TimesUp.transform.localScale = new Vector3(0.45f, 0.45f, 0.45f);
         p1TimesUp.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
-        p2TimesUp.transform.position = new Vector3(4.5f, 0.05f, -2f);
+        p2TimesUp.transform.position = new Vector3(5f, 0.05f, 3f);
         p2TimesUp.transform.localScale = new Vector3(0.45f, 0.45f, 0.45f);
         p2TimesUp.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
     }
