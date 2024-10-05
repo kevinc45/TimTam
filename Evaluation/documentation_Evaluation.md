@@ -24,6 +24,7 @@ We apply "think aloud" method during the testing and interview after testing.
 Two particiapnts join the testing. 
 
 ### Participant A:
+Video: https://drive.google.com/file/d/1voGZJEqbYtsuXiRsel20Xhr-CGRCsYxn/view?usp=sharing 
 <img width="500" alt="image" src="https://github.com/user-attachments/assets/50c682e3-5852-4d91-a9db-039d25ad77d9">
 
 - Observation:
@@ -41,6 +42,7 @@ Two particiapnts join the testing.
   
     
 ### Participant B:
+Video: https://drive.google.com/file/d/1NKZI8X0XMycf3hLll-38ks8_-WjBcuo-/view?usp=sharing
 <img width="600" alt="image" src="https://github.com/user-attachments/assets/f25cdaba-72c6-4c29-b806-f39afa901fee">
 
 - Observation:
