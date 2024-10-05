@@ -55,8 +55,11 @@ Two particiapnts join the testing.
 
 ## Analysis
 ⁠1. Participants are confused about the interface of menu and ingredient they need to collect coz these two areas are close and users don’t know what should they do.
+
 2.⁠ Participants may not sure what should they do for the sensor because they don’t know the connection between ingredients and sensors. 
+
 3.⁠ ⁠⁠It’s hard for users to do calculation in their mind while playing. They need to think about the ordering of the ingredients and kick the sensor match to the ingredient.
+
 4.⁠ ⁠⁠A problem for the scenario that what if there is no person playing a game in other side.
 
 ## Improvement
