@@ -328,7 +328,7 @@ Transform:
   m_GameObject: {fileID: 140487363}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.1}
+  m_LocalPosition: {x: 0, y: 0, z: 13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -588,10 +588,10 @@ MonoBehaviour:
   greenIngredientBgSprite: {fileID: 21300000, guid: 8ca64855c8cf847c8bc797ce1047e25f, type: 3}
   whiteIngredientBgSprite: {fileID: 21300000, guid: 752cdb088313148288c7fecbc0a2ffdf, type: 3}
   beigeIngredientBgSprite: {fileID: 21300000, guid: 63a6ca4712dfc4628b46b5cd3a931e20, type: 3}
-  yummyAudio: {fileID: 0}
+  yummyAudio: {fileID: 429247694}
   totalTime: 63
-  player1Yummy: {fileID: 0}
-  player2Yummy: {fileID: 0}
+  player1Yummy: {fileID: 6673578}
+  player2Yummy: {fileID: 777851914}
   portName1: COM16
   portName2: COM19
   baudRate: 9600
@@ -756,7 +756,7 @@ Transform:
   m_GameObject: {fileID: 554764683}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -963,7 +963,7 @@ Transform:
   m_GameObject: {fileID: 780713933}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
