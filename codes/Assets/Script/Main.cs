@@ -295,9 +295,35 @@ public class Main : MonoBehaviour
     // Assign tasks and positions for both players
     public void TaskAssign()
     {
-        player1Task = RecipeGenerator();
-        player2Task = RecipeGenerator();
-
+        // check if tasks of two players are the same 
+        bool isTaskSame = false;
+        
+        do
+        {
+            player1Task = RecipeGenerator();
+            player2Task = RecipeGenerator();
+            
+            if (player1Task != null && player2Task != null)
+            {
+                for (int i = 0; i < player1Task.Length; i++)
+                {
+                    for (int j = 0; j < player2Task.Length; j++)
+                    {
+                        if (player1Task[i] == player2Task[j])
+                        {
+                            Debug.Log("Same");
+                            isTaskSame = true;
+                        }
+                        else
+                        {
+                            Debug.Log("Diff");
+                            isTaskSame = false;
+                        }
+                    }
+                }
+            }
+        } while (isTaskSame);
+        
         GameObject player1Parent = GameObject.Find("Player1Recipe");
         GameObject player2Parent = GameObject.Find("Player2Recipe");
         // Create and place objects for player 1's tasks
@@ -307,7 +333,6 @@ public class Main : MonoBehaviour
             ingredient.transform.SetParent(player1Parent.transform);
             SpriteRenderer(ingredient);
             SetPosition(ingredient, player1RecipePosition[i]); // Assign specific position
-            
         }
 
         // Create and place objects for player 2's tasks
@@ -318,9 +343,6 @@ public class Main : MonoBehaviour
             SpriteRenderer(ingredient);
             SetPosition(ingredient, player2RecipePosition[i]); // Assign specific position
         }
-
-        // Debug.Log("Player 1 Tasks: " + string.Join(", ", player1Task));
-        // Debug.Log("Player 2 Tasks: " + string.Join(", ", player2Task));
     }
 
     // Set position and scale for each ingredient
