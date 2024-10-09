@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System.IO.Ports;
+using TMPro;
 
 public class Main : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class Main : MonoBehaviour
     
     private bool isPaused = false;
     public float totalTime = 10;
+    public TextMeshProUGUI player1CountDown;
+    public TextMeshProUGUI player2CountDown;
 
     private string[] player1Task;
     private string[] player2Task;
@@ -438,6 +441,12 @@ public class Main : MonoBehaviour
         else
         {
             totalTime = 0;
+        }
+
+        if (totalTime <= 60)
+        {
+            player1CountDown.text = totalTime.ToString("F0");
+            player2CountDown.text = totalTime.ToString("F0");
         }
     }
 
