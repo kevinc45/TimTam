@@ -1,13 +1,13 @@
 // The code is for the first Arduino board (Player 1)
 
-#define P1_ECHO_PIN_1 2
-#define P1_TRIG_PIN_1 3
-#define P1_ECHO_PIN_2 4
-#define P1_TRIG_PIN_2 5
-#define P1_ECHO_PIN_3 6
-#define P1_TRIG_PIN_3 7
-#define P1_ECHO_PIN_4 8
-#define P1_TRIG_PIN_4 9
+#define P1_TRIG_PIN_1 13
+#define P1_ECHO_PIN_1 12
+#define P1_TRIG_PIN_2 11
+#define P1_ECHO_PIN_2 10
+#define P1_TRIG_PIN_3 9
+#define P1_ECHO_PIN_3 8
+#define P1_TRIG_PIN_4 7
+#define P1_ECHO_PIN_4 6
 
 void setup() {
   Serial.begin(9600);
