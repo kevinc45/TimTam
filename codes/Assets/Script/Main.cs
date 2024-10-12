@@ -741,9 +741,13 @@ public class Main : MonoBehaviour
         p2TimesUp.transform.localScale = new Vector3(0.45f, 0.45f, 0.45f);
         p2TimesUp.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
     }
-
+    //
     // public CheckOverlapping()
     // {
+    //     for (int i = 0; i < player1Assigned; i++)
+    //     {
+    //         for (int j = object; i < player2)
+    //     }
     //     return isOverlapping;
     // }
 
