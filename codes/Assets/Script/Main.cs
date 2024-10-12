@@ -47,6 +47,8 @@ public class Main : MonoBehaviour
     public GameObject player1Yummy;
     public GameObject player2Yummy;
 
+    // private bool isOverlapping = false;
+
     // Arduino connection    
     private SerialPort serialPort1;
     private SerialPort serialPort2;
@@ -739,6 +741,11 @@ public class Main : MonoBehaviour
         p2TimesUp.transform.localScale = new Vector3(0.45f, 0.45f, 0.45f);
         p2TimesUp.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
     }
+
+    // public CheckOverlapping()
+    // {
+    //     return isOverlapping;
+    // }
 
     private void OnApplicationQuit()
     {
