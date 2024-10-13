@@ -301,6 +301,7 @@ public class Main : MonoBehaviour
     public void TaskAssign()
     {
         // check if tasks of two players are the same 
+        // check if tasks of two players are the same 
         bool isTaskSame = false;
         
         do
@@ -308,26 +309,24 @@ public class Main : MonoBehaviour
             player1Task = RecipeGenerator();
             player2Task = RecipeGenerator();
             
-            if (player1Task != null && player2Task != null)
+            if (player1Task != null && player2Task != null && player1Task.Length == player2Task.Length)
             {
-                for (int i = 0; i < player1Task.Length; i++)
+                HashSet<string> player1TaskSet = new HashSet<string>(player1Task);  // convert arrays to HashSet to ignore the order of tasks
+                HashSet<string> player2TaskSet = new HashSet<string>(player2Task);
+                
+                isTaskSame = player1TaskSet.SetEquals(player2TaskSet);  // check if both sets are equal
+
+                if (isTaskSame)
                 {
-                    for (int j = 0; j < player2Task.Length; j++)
-                    {
-                        if (player1Task[i] == player2Task[j])
-                        {
-                            Debug.Log("Same");
-                            isTaskSame = true;
-                        }
-                        else
-                        {
-                            Debug.Log("Diff");
-                            isTaskSame = false;
-                        }
-                    }
+                    Debug.Log("Same task, regenerate the task!");
+                }
+                else
+                {
+                    Debug.Log("Different task, do not regenerate the task!");
                 }
             }
         } while (isTaskSame);
+
         
         GameObject player1Parent = GameObject.Find("Player1Recipe");
         GameObject player2Parent = GameObject.Find("Player2Recipe");
@@ -379,7 +378,7 @@ public class Main : MonoBehaviour
             
                 foreach (var ingredient in player2Assigned)
                 {
-                    Debug.Log("Distance 2: " + Vector3.Distance(p1Position, ingredient.transform.position));
+                    // Debug.Log("Distance 2: " + Vector3.Distance(p1Position, ingredient.transform.position));
                     if (Vector3.Distance(p1Position, ingredient.transform.position) < 3.0f)
                     {
                         positionValid = false;
@@ -413,7 +412,7 @@ public class Main : MonoBehaviour
             
                 foreach (var ingredient in player1Assigned)
                 {
-                    Debug.Log("Distance 1: " + Vector3.Distance(p2Position, ingredient.transform.position));
+                    // Debug.Log("Distance 1: " + Vector3.Distance(p2Position, ingredient.transform.position));
                     if (Vector3.Distance(p2Position, ingredient.transform.position) < 3.0f)
                     {
                         Debug.Log("not short");
@@ -742,9 +741,9 @@ public class Main : MonoBehaviour
         p2TimesUp.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
     }
     //
-    // public CheckOverlapping()
+    // private CheckOverlapping(List<GameObject> player1, List<GameObject> player2)
     // {
-    //     for (int i = 0; i < player1Assigned; i++)
+    //     for (int i = 0; i < player1; i++)
     //     {
     //         for (int j = object; i < player2)
     //     }
