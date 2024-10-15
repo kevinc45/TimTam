@@ -56,6 +56,7 @@ public class Main : MonoBehaviour
     public string portName1 = "COM16"; // Change this depend on the FIRST Arduino's port
     public string portName2 = "COM19"; // Change this depend on the SECOND Arduino's port
     public int baudRate = 9600;
+    private bool isArduinoConnected = false;
 
     // Start is called before the first frame update
     void Start()
