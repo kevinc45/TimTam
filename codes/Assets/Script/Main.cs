@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.IO.Ports;
 using TMPro;
 
@@ -43,10 +44,10 @@ public class Main : MonoBehaviour
     private List<GameObject> player1Assigned = new List<GameObject>();
     private List<GameObject> player2Assigned = new List<GameObject>();
 
-    // private bool complete = false;
+    private bool complete = false;
     public GameObject player1Yummy;
     public GameObject player2Yummy;
-
+    
     // private bool isOverlapping = false;
 
     // Arduino connection    
@@ -55,7 +56,6 @@ public class Main : MonoBehaviour
     public string portName1 = "COM16"; // Change this depend on the FIRST Arduino's port
     public string portName2 = "COM19"; // Change this depend on the SECOND Arduino's port
     public int baudRate = 9600;
-    private bool isArduinoConnected = false;
 
     // Start is called before the first frame update
     void Start()
@@ -80,27 +80,19 @@ public class Main : MonoBehaviour
         IngredientAssign();  
 
         // Initiating Arduino Connection
-        try{
-            serialPort1 = new SerialPort(portName1, baudRate);
-            serialPort2 = new SerialPort(portName2, baudRate);
-            
-            if (!serialPort1.IsOpen)
-            {
-                serialPort1.Open();
-                serialPort1.ReadTimeout = 1000;
-            }
-            if (!serialPort2.IsOpen)
-            {
-                serialPort2.Open();
-                serialPort2.ReadTimeout = 1000;
-            }
-            isArduinoConnected = true;
-        }
-        catch (Exception e){
-            Debug.Log("Arduino is not connected");
-            isArduinoConnected = false;
-        }
-        
+        // serialPort1 = new SerialPort(portName1, baudRate);
+        // serialPort2 = new SerialPort(portName2, baudRate);
+        //
+        // if (!serialPort1.IsOpen)
+        // {
+        //     serialPort1.Open();
+        //     serialPort1.ReadTimeout = 1000;
+        // }
+        // if (!serialPort2.IsOpen)
+        // {
+        //     serialPort2.Open();
+        //     serialPort2.ReadTimeout = 1000;
+        // }
     }
 
     // Update is called once per frame
@@ -116,70 +108,69 @@ public class Main : MonoBehaviour
         // {
         //     Debug.Log("Serial Port is Open");
         // }
-        // if (serialPort.BytesToRead > 0)
+        // if (serialPort.ByoRead > 0)
         // {
-        //     Debug.Log("BytesToRead > 0");
+        //     Debug.Log("ByoRead > 0");
         // }
-        if (isArduinoConnected){
-            // Arduino 1, Player 1
-            if (serialPort1 != null && serialPort1.IsOpen && serialPort1.BytesToRead > 0)
-            {
-                string data1 = serialPort1.ReadLine();
-                string[] distances1 = data1.Split(',');
-            
-                if (distances1.Length == 4)
-                {
-                    if (float.TryParse(distances1[0], out float player1Distance1) &&
-                        float.TryParse(distances1[1], out float player1Distance2) &&
-                        float.TryParse(distances1[2], out float player1Distance3) &&
-                        float.TryParse(distances1[3], out float player1Distance4))
-                    {
-                        if (player1Distance1 < 50){
-                            P1KickIngredient(0);
-                        }
-                        else if (player1Distance2 < 50){
-                            P1KickIngredient(1);
-                        }
-                        else if (player1Distance3 < 50){
-                            P1KickIngredient(2);
-                        }
-                        else if (player1Distance4 < 50){
-                            P1KickIngredient(3);
-                        }
-                    }
-                }
-            }
-
-            // Arduino 2, Player 2
-            if (serialPort2 != null && serialPort2.IsOpen && serialPort2.BytesToRead > 0)
-            {
-                string data2 = serialPort2.ReadLine();
-                string[] distances2 = data2.Split(',');
-            
-                if (distances2.Length == 4)
-                {
-                    if (float.TryParse(distances2[0], out float player2Distance1) &&
-                        float.TryParse(distances2[1], out float player2Distance2) &&
-                        float.TryParse(distances2[2], out float player2Distance3) &&
-                        float.TryParse(distances2[3], out float player2Distance4))
-                    {
-                        if (player2Distance1 < 50){
-                            P2KickIngredient(0);
-                        }
-                        else if (player2Distance2 < 50){
-                            P2KickIngredient(1);
-                        }
-                        else if (player2Distance3 < 50){
-                            P2KickIngredient(2);
-                        }
-                        else if (player2Distance4 < 50){
-                            P2KickIngredient(3);
-                        }
-                    }
-                }
-            }
-        }
         
+        // Arduino 1, Player 1
+        // if (serialPort1 != null && serialPort1.IsOpen && serialPort1.ByoRead > 0)
+        // {
+        //     string data1 = serialPort1.ReadLine();
+        //     string[] distances1 = data1.Split(',');
+        //
+        //     if (distances1.Length == 4)
+        //     {
+        //         if (float.TryParse(distances1[0], out float player1Distance1) &&
+        //             float.TryParse(distances1[1], out float player1Distance2) &&
+        //             float.TryParse(distances1[2], out float player1Distance3) &&
+        //             float.TryParse(distances1[3], out float player1Distance4))
+        //         {
+        //             if (player1Distance1 < 75){
+        //                 P1KickIngredient(0);
+        //             }
+        //             else if (player1Distance2 < 75){
+        //                 P1KickIngredient(1);
+        //             }
+        //             else if (player1Distance3 < 75){
+        //                 P1KickIngredient(2);
+        //             }
+        //             else if (player1Distance4 < 75){
+        //                 P1KickIngredient(3);
+        //             }
+        //         }
+        //     }
+        // }
+
+        // Arduino 2, Player 2
+        // if (serialPort2 != null && serialPort2.IsOpen && serialPort2.ByoRead > 0)
+        // {
+        //     string data2 = serialPort2.ReadLine();
+        //     string[] distances2 = data2.Split(',');
+        //
+        //     if (distances2.Length == 4)
+        //     {
+        //         if (float.TryParse(distances2[0], out float player2Distance1) &&
+        //             float.TryParse(distances2[1], out float player2Distance2) &&
+        //             float.TryParse(distances2[2], out float player2Distance3) &&
+        //             float.TryParse(distances2[3], out float player2Distance4))
+        //         {
+        //             if (player2Distance1 < 75){
+        //                 P2KickIngredient(0);
+        //             }
+        //             else if (player2Distance2 < 75){
+        //                 P2KickIngredient(1);
+        //             }
+        //             else if (player2Distance3 < 75){
+        //                 P2KickIngredient(2);
+        //             }
+        //             else if (player2Distance4 < 75){
+        //                 P2KickIngredient(3);
+        //             }
+        //         }
+        //     }
+        // }
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
             P1KickIngredient(0);
@@ -750,15 +741,6 @@ public class Main : MonoBehaviour
         p2TimesUp.transform.localScale = new Vector3(0.45f, 0.45f, 0.45f);
         p2TimesUp.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
     }
-    //
-    // private CheckOverlapping(List<GameObject> player1, List<GameObject> player2)
-    // {
-    //     for (int i = 0; i < player1; i++)
-    //     {
-    //         for (int j = object; i < player2)
-    //     }
-    //     return isOverlapping;
-    // }
 
     private void OnApplicationQuit()
     {
