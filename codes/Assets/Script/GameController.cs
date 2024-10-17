@@ -7,11 +7,6 @@ public class GameController : MonoBehaviour
 {
     public GameObject quit;
     public GameObject restart;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -26,25 +21,23 @@ public class GameController : MonoBehaviour
     {
         if (gameObject.name == "Restart")
         {
-            Debug.Log("restart");
             Restart();
         }
         else if (gameObject.name == "Quit"){
-            Debug.Log("quit");
             QuitGame();
         }
     }
 
-    // restart the game: press the restart btn
+    // Restart the game: press the restart btn
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     
-    // close the game: press the close icon and esc
+    // Close the game: press the close icon and esc
     public void QuitGame()
     {
         Application.Quit();
-        UnityEditor.EditorApplication.isPlaying = false;
+        // UnityEditor.EditorApplication.isPlaying = false;  // Cannot run in build apk
     }
 }
