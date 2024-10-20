@@ -20,13 +20,26 @@ To deploy and use the Chef Cross project, follow these steps:
 - If Unity asks to replace any existing files, confirm the replacement to ensure that the correct assets are loaded.
   <img width="229" alt="ProjectStructure" src="https://github.com/user-attachments/assets/b2fbcf81-27c4-4c62-bfde-5ff5b1eae95c">
 
-### 4. Resolve Game Object Reference Errors (Optional)
+### 4. Ensure the Arduino Port Number
+
+- When you open the [code in assets](https://github.com/kevinc45/TimTam/blob/main/codes/Assets/Script/Main.cs), you want to check especially on this line:
+```cs
+    public string portName1 = "COM16";
+    public string portName2 = "COM19"; 
+```
+- Fill those with the port number where your Arduino is connected.
+  - **Windows:** Open `Device Manager` and find `Ports (COM & LPT)`. If connected properly, both Arduino COM numbers should appear there.
+  - **Mac:** Open `Terminal` and enter `ls /dev/cu.*`. To identify Arduino ports, it will likely be something like `/dev/cu.usbmodemXXXX` or `/dev/cu.usbserialXXXX`.
+  - Replace the value of both `portName1` and `portName2` in the code above with the value of your Arduino ports.
+
+
+### 5. Resolve Game Object Reference Errors (Optional)
 
 - If you encounter any errors in the Unity Console about Missing Game Object References, double-check that the **Recipe** object is properly referenced in the scene.
 - To verify ensure that it is correctly referenced, as shown below:
   <img width="762" alt="UnityHierachy" src="https://github.com/user-attachments/assets/16590bef-e58d-40f6-bf1c-83d60f9ed68d">
 
-### 5. Launch and Test the Prototype
+### 6. Launch and Test the Prototype
 
 - After setting up the assets, click Play in Unity to test the prototype.
 
