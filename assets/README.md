@@ -6,7 +6,7 @@ To deploy and use the Chef Cross project, follow these steps:
 
 ### 1. Download the project assets
 
-- [Click here](https://github.com/kevinc45/TimTam/tree/main/codes/Assets) to download the Assets folder from our GitHub repository.
+- [Click here](https://github.com/kevinc45/TimTam/tree/main/assets/Assets) to download the Assets folder from our GitHub repository.
 
 ### 2. Create a New Unity Project
 
